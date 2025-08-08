@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - ChronoVerse </title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Tailwind & Scripts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: #111827;
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .modal {
+      position: fixed;
+      top: 80px;
+      /* Add spacing below navbar */
+      left: 0;
+      width: 100%;
+      height: calc(100% - 80px);
+      /* Adjust height to account for spacing */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .modal-content {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+      margin: 0 20px;
+    }
+
+    @media (max-width: 480px) {
+      .modal-content {
+        padding: 20px;
+        margin: 0 15px;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .form-group:last-of-type {
+      margin-bottom: 0;
+      /* Remove margin between password field and button */
+    }
+
+    .form-group label {
+      font-weight: 500;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px 40px 10px 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #1f2937;
+      color: white;
+    }
+
+    .eye-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #d1d5db;
+      font-size: 1rem;
+      padding-top: 25px;
+    }
+
+    /* Hide default browser eye icon */
+    input::-ms-reveal,
+    input::-ms-clear {
+      display: none;
+    }
+
+    input[type="password"]::-webkit-credentials-auto-fill-button,
+    input[type="password"]::-webkit-textfield-decoration-container,
+    input[type="password"]::-webkit-clear-button,
+    input[type="password"]::-webkit-inner-spin-button,
+    input[type="password"]::-webkit-outer-spin-button {
+      display: none !important;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(to right, #667eea, #764ba2);
+      color: #fff;
+      transition: 0.3s ease;
+      display: block !important;
+      /* Force display */
+      opacity: 1 !important;
+      /* Force full visibility */
+      visibility: visible !important;
+      /* Ensure visibility */
+      z-index: 100;
+      /* Ensure button is not overlapped */
+    }
+
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .toggle-link {
+      text-align: center;
+      margin-top: 10px;
+      color: #bbb;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 0.95rem;
+    }
+
+    #auth-btn {
+      margin-top: 20px;
+    }
+
+    #message-container {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      display: none;
+      text-align: center;
+    }
+
+    #message-container.success {
+      background: #28a745;
+      color: white;
+      display: block;
+    }
+
+    #message-container.error {
+      background: #dc3545;
+      color: white;
+      display: block;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 3px solid #fff;
+      border-top: 3px solid transparent;
+      border-radius: 50%;
+      display: inline-block;
+      animation: spin 0.8s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .holographic {
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: holographic-shift 3s ease infinite;
+    }
+
+    @keyframes holographic-shift {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Navigation link styles */
+    .nav-link {
+      position: relative;
+      overflow: hidden;
+      opacity: 1;
+      /* Ensure links are visible by default */
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -100%;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #8b45c1, #667eea);
+      transition: left 0.3s ease;
+    }
+
+    .nav-link:hover::before {
+      left: 0;
+    }
+
+    /* Mobile Navigation Styles */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 280px;
+      height: 100vh;
+      background: rgba(17, 24, 39, 0.95);
+      backdrop-filter: blur(20px);
+      transition: right 0.3s ease;
+      z-index: 1000;
+      padding-top: 80px;
+    }
+
+    .mobile-menu.active {
+      right: 0;
+    }
+
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+
+    .mobile-menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-nav-link {
+      display: block;
+      padding: 15px 25px;
+      color: #d1d5db;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .mobile-nav-link:hover {
+      color: #ffffff;
+      background: rgba(102, 126, 234, 0.1);
+      border-left-color: #667eea;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background: #d1d5db;
+      margin: 3px 0;
+      transition: 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* Desktop Navigation - Hide on mobile */
+    .desktop-nav {
+      display: flex;
+    }
+
+    @media (max-width: 768px) {
+      .desktop-nav {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .modal-content {
+        margin: 0 20px;
+        padding: 25px;
+      }
+    }
+
+    /* Responsive font sizes */
+    @media (max-width: 480px) {
+      .holographic {
+        font-size: 2rem;
+      }
+
+      .modal-content {
+        padding: 20px;
+        margin: 0 15px;
+      }
+
+      .modal-content p {
+        font-size: 0.8rem;
+      }
+
+      .form-group input {
+        font-size: 0.9rem;
+        padding: 12px 40px 12px 12px;
+      }
+
+      .btn {
+        font-size: 0.9rem;
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 3D Canvas -->
+  <div id="three-canvas" class="fixed top-0 left-0 w-full h-full z-0"></div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" id="mobile-overlay"></div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="login.html" class="mobile-nav-link">
+      <i class="fas fa-home mr-3"></i>Home
+    </a>
+    <a href="#" id="createBtnMobile" class="mobile-nav-link">
+      <i class="fas fa-plus mr-3"></i>Create
+    </a>
+    <a href="#" id="explorebtnMobile" class="mobile-nav-link">
+      <i class="fas fa-compass mr-3"></i>Explore
+    </a>
+    <a href="signin.html" class="mobile-nav-link">
+      <i class="fas fa-sign-in-alt mr-3"></i>Sign In
+    </a>
+    <a href="signup.html" class="mobile-nav-link">
+      <i class="fas fa-user-plus mr-3"></i>Sign Up
+    </a>
+    <a href="aboutus.html" class="mobile-nav-link">
+      <i class="fas fa-info-circle mr-3"></i>About
+    </a>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="fixed top-0 left-0 w-full bg-gray-900 bg-opacity-80 backdrop-blur-lg z-50">
+    <div class="flex justify-between items-center px-4 md:px-6 lg:px-10 py-4">
+      <a href="login.html" class="text-xl md:text-2xl font-bold text-cyan-300 hover:text-white transition-colors">
+        ChronoVerse 
+      </a>
+      
+      <!-- Desktop Navigation -->
+      <div class="desktop-nav space-x-4 md:space-x-6 text-sm md:text-base font-medium">
+        <a href="login.html" class="nav-link text-gray-300 hover:text-white transition-colors">Home</a>
+        <a href="#" id="createBtn" class="nav-link text-gray-300 hover:text-white transition-colors">Create</a>
+        <a href="#" id="explorebtn" class="nav-link text-gray-300 hover:text-white transition-colors">Explore</a>
+        <a href="signin.html" class="nav-link text-gray-300 hover:text-white transition-colors">Sign In</a>
+        <a href="signup.html" class="nav-link text-gray-300 hover:text-white transition-colors">Sign Up</a>
+        <a href="aboutus.html" class="nav-link text-gray-300 hover:text-white transition-colors">About</a>
+      </div>
+
+      <!-- Mobile Hamburger Menu -->
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sign Up Modal -->
+  <div class="modal">
+    <div class="modal-content">
+      <h1 class="text-center text-2xl md:text-3xl font-bold mb-1 holographic">ChronoVerse </h1>
+      <p class="text-center text-gray-400 mb-6 text-sm">Where legendary characters are born.</p>
+      <!-- <h2 class="text-center">Sign Up</h2> -->
+      <form id="auth-form">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" required />
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required />
+          <i class="fa-solid fa-eye eye-icon" id="toggle-password"></i>
+        </div>
+
+        <button type="submit" class="btn" id="auth-btn" style="margin-top: 25px;">
+          <span id="btn-text">SIGN UP</span>
+        </button>
+
+      </form>
+      <div class="toggle-link" id="toggle-link" style="margin-top: 10px;">Already have an account? Sign In</div>
+      <div id="message-container"></div>
+    </div>
+  </div>
+
+  <!-- Firebase & Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYI3WQ9-peR0HEPxhrxCrsAEg2wn9QoDY",
+      authDomain: "character-generator-75fdf.firebaseapp.com",
+      projectId: "character-generator-75fdf",
+      storageBucket: "character-generator-75fdf.appspot.com",
+      messagingSenderId: "233443409399",
+      appId: "1:233443409399:web:d6757f2a53db4388bc82f2",
+      measurementId: "G-F8TEK5KSNV"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Mobile Menu Toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileOverlay = document.getElementById('mobile-overlay');
+
+    function toggleMobileMenu() {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+      mobileOverlay.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    }
+
+    function closeMobileMenu() {
+      hamburger.classList.remove('active');
+      mobileMenu.classList.remove('active');
+      mobileOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    hamburger.addEventListener('click', toggleMobileMenu);
+    mobileOverlay.addEventListener('click', closeMobileMenu);
+
+    // Close mobile menu when clicking on links
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', closeMobileMenu);
+    });
+
+    // Auth check function for both desktop and mobile
+    function checkAuthAndRedirect(e, targetPage = "home.html") {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (user) {
+        window.location.href = targetPage;
+      } else {
+        const message = document.createElement("div");
+        message.textContent = "Please Sign In First";
+        message.style.cssText = `
+          color: white;
+          background-color: red;
+          padding: 10px 20px;
+          position: fixed;
+          top: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 10000;
+          border-radius: 8px;
+          font-size: 14px;
+        `;
+        document.body.appendChild(message);
+        setTimeout(() => {
+          message.remove();
+          window.location.href = "signin.html?redirected=true";
+        }, 2000);
+      }
+    }
+
+    // Show "Please login first" message if redirected
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('redirected') === 'true') {
+        const message = document.getElementById('message-container');
+        message.className = 'error';
+        message.textContent = 'Please login first';
+        message.style.display = 'block';
+        setTimeout(() => {
+          message.style.display = 'none';
+        }, 3000);
+      }
+    });
+
+    // Desktop navigation events
+    document.getElementById("createBtn").addEventListener("click", checkAuthAndRedirect);
+
+    document.getElementById("explorebtn").addEventListener("click", (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (user) {
+        window.location.href = "home.html";
+      } else {
+        const message = document.createElement("div");
+        message.textContent = "To Explore Universe Sign In First";
+        message.style.cssText = `
+          color: white;
+          background-color: red;
+          padding: 10px 20px;
+          position: fixed;
+          top: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 10000;
+          border-radius: 8px;
+          font-size: 14px;
+        `;
+        document.body.appendChild(message);
+        setTimeout(() => {
+          message.remove();
+          window.location.href = "signin.html?redirected=true";
+        }, 2000);
+      }
+    });
+
+    // Mobile navigation events
+    document.getElementById("createBtnMobile").addEventListener("click", checkAuthAndRedirect);
+
+    document.getElementById("explorebtnMobile").addEventListener("click", (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (user) {
+        window.location.href = "home.html";
+      } else {
+        const message = document.createElement("div");
+        message.textContent = "To Explore Universe Sign In First";
+        message.style.cssText = `
+          color: white;
+          background-color: red;
+          padding: 10px 20px;
+          position: fixed;
+          top: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 10000;
+          border-radius: 8px;
+          font-size: 14px;
+        `;
+        document.body.appendChild(message);
+        setTimeout(() => {
+          message.remove();
+          window.location.href = "signin.html?redirected=true";
+        }, 2000);
+      }
+    });
+
+    document.getElementById("toggle-link").addEventListener("click", () => {
+      window.location.href = "signin.html";
+    });
+
+    document.getElementById("toggle-password").addEventListener("click", function () {
+      const input = document.getElementById("password");
+      const isHidden = input.type === "password";
+      input.type = isHidden ? "text" : "password";
+      this.classList.toggle("fa-eye");
+      this.classList.toggle("fa-eye-slash");
+    });
+
+    document.getElementById("auth-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const firstName = document.getElementById("firstName").value;
+      const lastName = document.getElementById("lastName").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const authBtn = document.getElementById("auth-btn");
+      const btnText = document.getElementById("btn-text");
+      const messageContainer = document.getElementById("message-container");
+
+      authBtn.disabled = true;
+      btnText.innerHTML = `<span class="spinner"></span>Creating account...`;
+      messageContainer.style.display = "none";
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        await setDoc(doc(db, "Users", user.uid), {
+          firstName,
+          lastName,
+          email,
+          createdAt: new Date()
+        });
+        messageContainer.className = "success";
+        messageContainer.textContent = "Account created successfully!";
+        messageContainer.style.display = "block";
+        setTimeout(() => window.location.href = "signin.html", 1500);
+      } catch (error) {
+        authBtn.disabled = false;
+        btnText.textContent = "SIGN UP";
+        messageContainer.className = "error";
+        messageContainer.textContent =
+          error.code === "auth/email-already-in-use" ? "Email already in use." :
+            error.code === "auth/invalid-email" ? "Invalid email." :
+              error.code === "auth/weak-password" ? "Password too weak (min 6 chars)." :
+                "Error: " + error.message;
+        messageContainer.style.display = "block";
+      }
+    });
+
+    // GSAP Animation for navigation bar only
+    gsap.from('nav', { 
+      opacity: 0, 
+      y: -50, 
+      duration: 1, 
+      ease: "power2.out" 
+    });
+
+    // Close mobile menu on window resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        closeMobileMenu();
+      }
+    });
+  </script>
+
+  <!-- 3D Background -->
+  <script>
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById('three-canvas').appendChild(renderer.domElement);
+
+    const particleGroups = [];
+    const colors = [0x8b45c1, 0x667eea, 0x764ba2, 0xf093fb, 0xf5576c];
+
+    for (let g = 0; g < 2; g++) {
+      const count = window.innerWidth < 768 ? 150 : 300; // Reduce particles on mobile
+      const geo = new THREE.BufferGeometry();
+      const posArray = new Float32Array(count * 3);
+      const velArray = new Float32Array(count * 3);
+
+      for (let i = 0; i < count * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 1000;
+        velArray[i] = (Math.random() - 0.5) * 1;
+      }
+
+      geo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      geo.setAttribute('velocity', new THREE.BufferAttribute(velArray, 3));
+
+      const mat = new THREE.PointsMaterial({
+        size: Math.random() * 2 + 1,
+        color: colors[g % colors.length],
+        transparent: true,
+        opacity: 0.7,
+        blending: THREE.AdditiveBlending
+      });
+
+      const mesh = new THREE.Points(geo, mat);
+      scene.add(mesh);
+      particleGroups.push({ mesh, velocities: velArray });
+    }
+
+    camera.position.z = 200;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      particleGroups.forEach((group) => {
+        const pos = group.mesh.geometry.attributes.position.array;
+        const vel = group.velocities;
+        for (let i = 0; i < pos.length; i += 3) {
+          pos[i] += vel[i];
+          pos[i + 1] += vel[i + 1];
+          pos[i + 2] += vel[i + 2];
+          if (pos[i] > 500) pos[i] = -500;
+          if (pos[i] < -500) pos[i] = 500;
+          if (pos[i + 1] > 500) pos[i + 1] = -500;
+          if (pos[i + 1] < -500) pos[i + 1] = 500;
+          if (pos[i + 2] > 500) pos[i + 2] = -500;
+          if (pos[i + 2] < -500) pos[i + 2] = 500;
+        }
+        group.mesh.geometry.attributes.position.needsUpdate = true;
+      });
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+
+</html>

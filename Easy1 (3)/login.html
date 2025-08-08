@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0" />
+  <title>ChronoVerse  - Loki's Character Chronicles</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .spacer {
+        height: 8cm;
+        /* Reduced height for mobile to maintain proportionality */
+      }
+    }
+
+    .auth-section {
+      border: 2px solid transparent;
+      border-image: linear-gradient(45deg, #9333ea, #ec4899) 1;
+      border-image-slice: 1;
+      background-clip: padding-box;
+      border-radius: 20px;
+      /* Increased for more pronounced curved corners */
+      animation: gradient-border 4s linear infinite;
+    }
+
+    @keyframes gradient-border {
+      0% {
+        border-image-source: linear-gradient(45deg, #9333ea, #ec4899);
+      }
+
+      100% {
+        border-image-source: linear-gradient(45deg, #ec4899, #9333ea);
+      }
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Advanced CSS Animations */
+    @keyframes floating {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    /* Mobile Navigation */
+    @media (max-width: 768px) {
+      .desktop-menu {
+        display: none;
+      }
+
+      .mobile-menu-toggle {
+        display: block !important;
+        z-index: 9999;
+      }
+
+      .mobile-nav {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100vh;
+        background: rgba(17, 24, 39, 0.98);
+        backdrop-filter: blur(20px);
+        z-index: 9998;
+        transition: left 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .mobile-nav.active {
+        left: 0;
+      }
+
+      .mobile-nav a {
+        font-size: 1.5rem;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        background: rgba(139, 69, 193, 0.1);
+        width: 80%;
+        text-align: center;
+      }
+    }
+
+    @keyframes pulse-glow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 20px rgba(139, 69, 193, 0.5);
+        transform: scale(1);
+      }
+
+      50% {
+        box-shadow: 0 0 40px rgba(139, 69, 193, 0.8);
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    @keyframes rotate-3d {
+      0% {
+        transform: rotateX(0deg) rotateY(0deg);
+      }
+
+      25% {
+        transform: rotateX(10deg) rotateY(90deg);
+      }
+
+      50% {
+        transform: rotateX(0deg) rotateY(180deg);
+      }
+
+      75% {
+        transform: rotateX(-10deg) rotateY(270deg);
+      }
+
+      100% {
+        transform: rotateX(0deg) rotateY(360deg);
+      }
+    }
+
+    @keyframes text-wave {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      20% {
+        transform: translateY(-10px);
+      }
+
+      40% {
+        transform: translateY(0px);
+      }
+
+      60% {
+        transform: translateY(-5px);
+      }
+
+      80% {
+        transform: translateY(0px);
+      }
+    }
+
+    .floating {
+      animation: floating 3s ease-in-out infinite;
+    }
+
+    .pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    .shimmer-effect {
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      background-size: 200% 100%;
+      animation: shimmer 2s linear infinite;
+    }
+
+    .rotate-3d {
+      animation: rotate-3d 4s linear infinite;
+    }
+
+    .text-wave {
+      animation: text-wave 2s ease-in-out infinite;
+    }
+
+    /* Letter animation for title */
+    .letter {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    /* Particle effects */
+    .particle-trail {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #8b45c1;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    /* Morphing backgrounds */
+    .morph-bg {
+      background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+      background-size: 400% 400%;
+      animation: gradient-morph 8s ease infinite;
+    }
+
+    @keyframes gradient-morph {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Glass morphism with animation */
+    .glass-morph:hover {
+      backdrop-filter: blur(15px);
+      transform: translateY(-5px) scale(1.01);
+    }
+
+    /* Magnetic hover effect */
+    .magnetic-hover {
+      transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    /* Holographic effect */
+    .holographic {
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7);
+      background-size: 300% 300%;
+      animation: holographic-shift 3s ease infinite;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+
+    @media (max-width: 768px) {
+      body {
+        font-size: 16px;
+        /* Prevent zoom on input focus */
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* Reduce particle effects on mobile */
+      #three-canvas {
+        opacity: 0.6;
+      }
+
+      /* Touch-friendly buttons */
+      button,
+      .btn {
+        min-height: 44px;
+        padding: 12px 16px;
+      }
+
+      /* Better text sizing */
+      .holographic {
+        font-size: 2.5rem !important;
+        line-height: 1.2;
+      }
+
+      /* Stack auth buttons */
+      .auth-buttons {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .auth-buttons button,
+      .auth-buttons a {
+        width: 100%;
+      }
+
+      /* Optimize modals */
+      .modal-content {
+        width: 95%;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+    }
+
+    @keyframes holographic-shift {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Navigation improvements */
+    .nav-link {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -100%;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #8b45c1, #667eea);
+      transition: left 0.3s ease;
+    }
+
+    .nav-link:hover::before {
+      left: 0;
+    }
+
+    /* Auth modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: rgba(30, 30, 30, 0.95);
+      padding: 2rem;
+      border-radius: 20px;
+      border: 1px solid rgba(139, 69, 193, 0.3);
+      max-width: 400px;
+      width: 90%;
+      transform: scale(0.7);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .modal.active .modal-content {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .wizard-section {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wizard-content {
+      max-width: 600px;
+      width: 90%;
+      padding: 2rem;
+      border-radius: 20px;
+      background: rgba(30, 30, 30, 0.95);
+      border: 1px solid rgba(139, 69, 193, 0.3);
+    }
+
+    .wizard-step {
+      display: none;
+    }
+
+    .wizard-step.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 8px;
+      background: rgba(50, 50, 50, 0.8);
+      border: 1px solid rgba(139, 69, 193, 0.3);
+      color: white;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-900 text-white overflow-x-hidden relative transition-colors duration-500">
+  <!-- 3D Background Canvas -->
+  <div id="three-canvas" class="fixed top-0 left-0 w-full h-full z-[-1]"></div>
+
+  <!-- Particle Trail Container -->
+  <div id="particle-container" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="fixed top-0 left-0 w-full bg-gray-900 bg-opacity-80 backdrop-blur-lg z-50">
+    <div class="flex justify-between items-center px-6 md:px-10 py-4">
+      <!-- Left Side: Logo -->
+      <a href="login.html" class="text-2xl font-bold text-cyan-300 hover:text-white transition-colors">
+        ChronoVerse 
+      </a>
+
+      <!-- Hamburger Menu (Mobile Only) - ADD THIS -->
+      <button class="mobile-menu-toggle md:hidden text-white text-2xl" id="mobile-toggle">
+        <span id="hamburger-icon">☰</span>
+      </button>
+
+      <!-- Right Side: Navigation Links (Desktop Only) - ADD md:flex class -->
+      <div class="desktop-menu hidden md:flex space-x-6 text-base font-medium">
+        <a href="login.html" class="nav-link text-gray-300 hover:text-white transition-colors">Home</a>
+        <a href="home.html" id="createBtn" class="nav-link text-gray-300 hover:text-white transition-colors">Create</a>
+        <a href="explore.html" id="explorebtn"
+          class="nav-link text-gray-300 hover:text-white transition-colors">Explore</a>
+        <!-- Dynamic Auth Links -->
+        <div id="auth-links" class="flex space-x-6">
+          <!-- Links will be dynamically added here based on auth state -->
+        </div>
+        <a href="aboutus.html" class="nav-link text-gray-300 hover:text-white transition-colors pr-2 md:pr-2">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Navigation Overlay - ADD THIS AFTER NAV -->
+  <div id="mobile-nav" class="mobile-nav">
+    <a href="login.html" class="nav-link text-white">Home</a>
+    <a href="home.html" id="mobile-createBtn" class="nav-link text-white">Create</a>
+    <a href="explore.html" id="mobile-explorebtn" class="nav-link text-white">Explore</a>
+    <div id="mobile-auth-links"></div>
+    <a href="aboutus.html" class="nav-link text-white">About</a>
+  </div>
+
+  <!-- Sign In Modal -->
+  <div id="signin-modal" class="modal">
+    <div class="modal-content glass-morph">
+      <span class="close-modal cursor-pointer text-gray-300 hover:text-white float-right">×</span>
+      <h2 class="text-2xl font-semibold mb-4">Sign In</h2>
+      <form id="signin-form">
+        <div class="mb-4">
+          <input type="email" placeholder="Email"
+            class="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-purple-500"
+            required>
+        </div>
+        <div class="mb-4">
+          <input type="password" placeholder="Password"
+            class="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-purple-500"
+            required>
+        </div>
+        <button type="submit"
+          class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition-all">Sign
+          In</button>
+        <p class="mt-4 text-gray-300">Don't have an account? <a href="#" id="switch-to-signup"
+            class="text-purple-400 hover:text-purple-300">Sign Up</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Sign Up Modal -->
+  <div id="signup-modal" class="modal">
+    <div class="modal-content glass-morph">
+      <span class="close-modal cursor-pointer text-gray-300 hover:text-white float-right">×</span>
+      <h2 class="text-2xl font-semibold mb-4">Sign Up</h2>
+      <form id="signup-form">
+        <div class="mb-4">
+          <input type="text" placeholder="Username"
+            class="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-purple-500"
+            required>
+        </div>
+        <div class="mb-4">
+          <input type="email" placeholder="Email"
+            class="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-purple-500"
+            required>
+        </div>
+        <div class="mb-4">
+          <input type="password" placeholder="Password"
+            class="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-purple-500"
+            required>
+        </div>
+        <button type="submit"
+          class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition-all">Sign
+          Up</button>
+        <p class="mt-4 text-gray-300">Already have an account? <a href="#" id="switch-to-signin"
+            class="text-purple-400 hover:text-purple-300">Sign In</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="container mx-auto px-4 py-12 max-w-5xl text-center relative z-10 mt-20">
+    <header class="mb-12 floating">
+      <h1 class="text-4xl sm:text-6xl font-bold mb-4 holographic">
+        <span class="letter">C</span>
+        <span class="letter">h</span>
+        <span class="letter">a</span>
+        <span class="letter">r</span>
+        <span class="letter">a</span>
+        <span class="letter">c</span>
+        <span class="letter">F</span>
+        <span class="letter">o</span>
+        <span class="letter">r</span>
+        <span class="letter">g</span>
+        <span class="letter">e</span>
+      </h1>
+      <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-4">Where legendary characters are born and epic
+        stories unfold</p>
+      <p class="text-md text-gray-400 max-w-xl mx-auto shimmer-effect">
+        Join Loki and The Watcher in chronicling the multiverse's greatest heroes and villains
+      </p>
+    </header>
+
+    <!-- Feature Cards -->
+    <div class="grid md:grid-cols-3 gap-6 mb-12">
+      <div class="glass-morph p-6 rounded-2xl transition-transform duration-300 hover:scale-105">
+        <div class="text-4xl mb-4">⚔️</div>
+        <h3 class="text-xl font-semibold mb-2">Create Characters</h3>
+        <p class="text-gray-300">Forge legendary heroes and villains with detailed backstories, powers, and weaknesses
+        </p>
+      </div>
+      <div class="glass-morph p-6 rounded-2xl transition-transform duration-300 hover:scale-105">
+        <div class="text-4xl mb-4">🤖</div>
+        <h3 class="text-xl font-semibold mb-2">AI Story Generation</h3>
+        <p class="text-gray-300">Watch as AI weaves epic narratives from your character's details</p>
+      </div>
+      <div class="glass-morph p-6 rounded-2xl transition-transform duration-300 hover:scale-105">
+        <div class="text-4xl mb-4">🌌</div>
+        <h3 class="text-xl font-semibold mb-2">Multiverse Explorer</h3>
+        <p class="text-gray-300">Browse and discover characters across infinite timelines and realities</p>
+      </div>
+    </div>
+
+    <div class=".spacer"></div>
+
+    <div
+      class="auth-section glass-morph p-8 rounded-2xl shadow-xl mb-10 magnetic-hover transition-transform duration-300"
+      style="border-radius: 2rem;">
+      <h3 class="text-2xl font-semibold mb-4">Begin Your Multiverse Journey</h3>
+      <p class="text-gray-300 mb-6">Sign up to start creating characters, generating stories, and exploring the endless
+        possibilities of the multiverse</p>
+      <div class="flex justify-center gap-4 flex-wrap">
+        <button id="demo-btn"
+          class="bg-gradient-to-r from-green-500 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:from-teal-500 hover:to-green-500 transition-all duration-300 pulse-glow magnetic-hover">
+          ⚡ Try Demo
+        </button>
+        <a href="signin.html" id="get-started-btn"
+          class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 magnetic-hover inline-block">
+          🚀 Get Started
+        </a>
+        <a href="aboutus.html"
+          class="bg-gradient-to-r from-yellow-400 to-red-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:from-yellow-500 hover:to-red-600 transition-all duration-300 magnetic-hover">
+          🧠 About Us
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYI3WQ9-peR0HEPxhrxCrsAEg2wn9QoDY",
+      authDomain: "character-generator-75fdf.firebaseapp.com",
+      projectId: "character-generator-75fdf",
+      storageBucket: "character-generator-75fdf.appspot.com",
+      messagingSenderId: "233443409399",
+      appId: "1:233443409399:web:d6757f2a53db4388bc82f2",
+      measurementId: "G-F8TEK5KSNV"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Mobile menu functionality
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+
+    mobileToggle.addEventListener('click', () => {
+      mobileNav.classList.toggle('active');
+      hamburgerIcon.textContent = mobileNav.classList.contains('active') ? '✕' : '☰';
+    });
+
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('#mobile-nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('active');
+        hamburgerIcon.textContent = '☰';
+      });
+    });
+
+    // Update mobile auth links function
+    function updateMobileNavLinks(user) {
+      const mobileAuthLinks = document.getElementById('mobile-auth-links');
+      mobileAuthLinks.innerHTML = '';
+
+      if (user) {
+        const signOutLink = document.createElement('a');
+        signOutLink.href = '#';
+        signOutLink.className = 'nav-link text-white';
+        signOutLink.textContent = 'Sign Out';
+        signOutLink.addEventListener('click', async (e) => {
+          e.preventDefault();
+          // Your sign out logic
+        });
+        mobileAuthLinks.appendChild(signOutLink);
+      } else {
+        const signInLink = document.createElement('a');
+        signInLink.href = 'signin.html';
+        signInLink.className = 'nav-link text-white';
+        signInLink.textContent = 'Sign In';
+        mobileAuthLinks.appendChild(signInLink);
+      }
+    }
+
+    document.getElementById('get-started-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          window.location.href = 'home.html';
+        } else {
+          window.location.href = 'signin.html';
+        }
+      });
+    });
+
+    function updateNavLinks(user) {
+      const authLinks = document.getElementById('auth-links');
+      authLinks.innerHTML = '';
+
+      if (user) {
+        const signOutLink = document.createElement('a');
+        signOutLink.href = '#';
+        signOutLink.className = 'nav-link text-gray-300 hover:text-white transition-colors';
+        signOutLink.textContent = 'Sign Out';
+        signOutLink.addEventListener('click', async (e) => {
+          e.preventDefault();
+          try {
+            await signOut(auth);
+            showMessage('Signed out successfully', 'green');
+          } catch (error) {
+            showMessage('Error signing out: ' + error.message, 'red');
+          }
+        });
+        authLinks.appendChild(signOutLink);
+      } else {
+        const signInLink = document.createElement('a');
+        signInLink.href = 'signin.html';
+        signInLink.className = 'nav-link text-gray-300 hover:text-white transition-colors';
+        signInLink.textContent = 'Sign In';
+        authLinks.appendChild(signInLink);
+
+        const signUpLink = document.createElement('a');
+        signUpLink.href = 'signup.html';
+        signUpLink.className = 'nav-link text-gray-300 hover:text-white transition-colors';
+        signUpLink.textContent = 'Sign Up';
+        authLinks.appendChild(signUpLink);
+      }
+    }
+
+    function showMessage(text, color) {
+      const message = document.createElement('div');
+      message.textContent = text;
+      message.style.color = 'white';
+      message.style.backgroundColor = color;
+      message.style.padding = '10px 20px';
+      message.style.position = 'fixed';
+      message.style.top = '20px';
+      message.style.left = '50%';
+      message.style.transform = 'translateX(-50%)';
+      message.style.zIndex = '10000';
+      message.style.borderRadius = '8px';
+      document.body.appendChild(message);
+      setTimeout(() => message.remove(), 2000);
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      updateNavLinks(user);
+    });
+
+    document.getElementById('createBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (user) {
+        window.location.href = 'home.html';
+      } else {
+        showMessage('Please Sign In First', 'red');
+        setTimeout(() => window.location.href = 'signin.html', 2000);
+      }
+    });
+    document.getElementById('explorebtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (user) {
+        window.location.href = 'explore.html';
+      } else {
+        showMessage('To Explore Universe Sign In First', 'red');
+        setTimeout(() => window.location.href = 'signin.html', 2000);
+      }
+    });
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById('three-canvas').appendChild(renderer.domElement);
+
+    const particleGroups = [];
+    const colors = [0x8b45c1, 0x667eea, 0x764ba2, 0xf093fb, 0xf5576c];
+
+    for (let g = 0; g < 3; g++) {
+      const particleCount = 500;
+      const particlesGeometry = new THREE.BufferGeometry();
+      const posArray = new Float32Array(particleCount * 3);
+      const velocityArray = new Float32Array(particleCount * 3);
+
+      for (let i = 0; i < particleCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 1000;
+        velocityArray[i] = (Math.random() - 0.5) * 0.02;
+      }
+
+      particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      particlesGeometry.setAttribute('velocity', new THREE.BufferAttribute(velocityArray, 3));
+
+      const material = new THREE.PointsMaterial({
+        size: Math.random() * 3 + 1,
+        color: colors[g % colors.length],
+        transparent: true,
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending
+      });
+
+      const particleMesh = new THREE.Points(particlesGeometry, material);
+      scene.add(particleMesh);
+      particleGroups.push({ mesh: particleMesh, velocities: velocityArray });
+    }
+
+    camera.position.z = 200;
+
+    const mouse = new THREE.Vector2();
+    let mouseInfluence = 0;
+
+    window.addEventListener('mousemove', (event) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      mouseInfluence = Math.min(mouseInfluence + 0.01, 0.1);
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      particleGroups.forEach((group, index) => {
+        const positions = group.mesh.geometry.attributes.position.array;
+        const velocities = group.velocities;
+
+        for (let i = 0; i < positions.length; i += 3) {
+          positions[i] += velocities[i] + mouse.x * mouseInfluence;
+          positions[i + 1] += velocities[i + 1] + mouse.y * mouseInfluence;
+          positions[i + 2] += velocities[i + 2];
+
+          if (positions[i] > 500) positions[i] = -500;
+          if (positions[i] < -500) positions[i] = 500;
+          if (positions[i + 1] > 500) positions[i + 1] = -500;
+          if (positions[i + 1] < -500) positions[i + 1] = 500;
+          if (positions[i + 2] > 500) positions[i + 2] = -500;
+          if (positions[i + 2] < -500) positions[i + 2] = 500;
+        }
+
+        group.mesh.geometry.attributes.position.needsUpdate = true;
+        group.mesh.rotation.y += 0.001 * (index + 1);
+        group.mesh.rotation.x += 0.0005 * (index + 1);
+      });
+
+      mouseInfluence = Math.max(mouseInfluence - 0.005, 0);
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    const particleContainer = document.getElementById('particle-container');
+    let particleId = 0;
+
+    function createParticleTrail(x, y) {
+      const particle = document.createElement('div');
+      particle.className = 'particle-trail';
+      particle.style.left = x + 'px';
+      particle.style.top = y + 'px';
+      particle.style.opacity = '1';
+      particleContainer.appendChild(particle);
+
+      gsap.to(particle, {
+        opacity: 0,
+        scale: 0,
+        x: Math.random() * 100 - 50,
+        y: Math.random() * 100 - 50,
+        duration: 2,
+        ease: "power2.out",
+        onComplete: () => {
+          particle.remove();
+        }
+      });
+    }
+
+    document.addEventListener('mousemove', (e) => {
+      if (Math.random() < 0.1) {
+        createParticleTrail(e.clientX, e.clientY);
+      }
+    });
+
+    const magneticElements = document.querySelectorAll('.magnetic-hover');
+    magneticElements.forEach(element => {
+      element.addEventListener('mouseenter', (e) => {
+        gsap.to(element, { scale: 1.1, duration: 0.3, ease: "power2.out" });
+      });
+      element.addEventListener('mouseleave', (e) => {
+        gsap.to(element, {
+          scale: 1,
+          x: 0,
+          y: 0,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+      });
+
+      element.addEventListener('mousemove', (e) => {
+        const rect = element.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        gsap.to(element, { x: x * 0.1, y: y * 0.1, duration: 0.3, ease: "power2.out" });
+      });
+    });
+
+    const signinModal = document.getElementById('signin-modal');
+    const signupModal = document.getElementById('signup-modal');
+    const closeModals = document.querySelectorAll('.close-modal');
+
+    closeModals.forEach(btn => {
+      btn.addEventListener('click', () => {
+        signinModal.classList.remove('active');
+        signupModal.classList.remove('active');
+      });
+    });
+
+    document.getElementById('switch-to-signup').addEventListener('click', (e) => {
+      e.preventDefault();
+      signinModal.classList.remove('active');
+      signupModal.classList.add('active');
+    });
+
+    document.getElementById('switch-to-signin').addEventListener('click', (e) => {
+      e.preventDefault();
+      signupModal.classList.remove('active');
+      signinModal.classList.add('active');
+    });
+
+    [signinModal, signupModal].forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+    });
+
+    document.getElementById('signin-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('🎭 Sign in functionality will be implemented with Firebase/Clerk authentication!');
+      signinModal.classList.remove('active');
+    });
+
+    document.getElementById('signup-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('🎭 Sign up functionality will be implemented with Firebase/Clerk authentication!');
+      signupModal.classList.remove('active');
+    });
+
+
+    const tl = gsap.timeline();
+    tl.from('.letter', {
+      opacity: 0,
+      y: 20,
+      duration: 0.3,
+      stagger: 0.1,
+      ease: "power2.out"
+    })
+      .from('.auth-section', { opacity: 0, scale: 0.8, duration: 1, ease: "back.out(1.7)" }, "-=0.5")
+      .from('nav', { opacity: 0, y: -50, duration: 1, ease: "power2.out" }, "-=1")
+      .from('.grid > div', { opacity: 0, y: 50, duration: 0.8, stagger: 0.2, ease: "power2.out" }, "-=0.5");
+
+    document.getElementById('demo-btn').addEventListener('click', (e) => {
+      const rect = e.target.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      for (let i = 0; i < 20; i++) {
+        createParticleTrail(centerX, centerY);
+      }
+      gsap.to(e.target, {
+        scale: 1.2, duration: 0.1, yoyo: true, repeat: 1, ease: "power2.inOut",
+        onComplete: () => { alert('⚡ Demo: Coming Soon..'); }
+      });
+    });
+
+    document.getElementById('get-started-btn').addEventListener('click', (e) => {
+      signupModal.classList.add('active');
+    });
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    const tl1 = gsap.timeline();
+    tl1.from('.nav-link', {
+      opacity: 0,
+      y: -50,
+      duration: 0.8,
+      stagger: 0.2,
+      ease: "power2.out"
+    });
+  </script>
+</body>
+
+</html>
