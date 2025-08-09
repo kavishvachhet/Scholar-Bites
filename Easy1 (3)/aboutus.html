@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About Us - ChronoVerse </title>
+  <title>About Us - ChronoVerse</title>
   <!-- Fonts and Libraries -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -22,7 +22,6 @@
     @media (max-width: 768px) {
       .spacer {
         height: 8cm;
-        /* Reduced height for mobile to maintain proportionality */
       }
     }
 
@@ -32,7 +31,6 @@
       border-image-slice: 1;
       background-clip: padding-box;
       border-radius: 20px;
-      /* Increased for more pronounced curved corners */
       animation: gradient-border 4s linear infinite;
     }
 
@@ -57,25 +55,19 @@
 
     /* Advanced CSS Animations */
     @keyframes floating {
-
-      0%,
-      100% {
+      0%, 100% {
         transform: translateY(0px);
       }
-
       50% {
         transform: translateY(-20px);
       }
     }
 
     @keyframes pulse-glow {
-
-      0%,
-      100% {
+      0%, 100% {
         box-shadow: 0 0 20px rgba(139, 69, 193, 0.5);
         transform: scale(1);
       }
-
       50% {
         box-shadow: 0 0 40px rgba(139, 69, 193, 0.8);
         transform: scale(1.05);
@@ -86,7 +78,6 @@
       0% {
         background-position: -200% 0;
       }
-
       100% {
         background-position: 200% 0;
       }
@@ -96,43 +87,33 @@
       0% {
         transform: rotateX(0deg) rotateY(0deg);
       }
-
       25% {
         transform: rotateX(10deg) rotateY(90deg);
       }
-
       50% {
         transform: rotateX(0deg) rotateY(180deg);
       }
-
       75% {
         transform: rotateX(-10deg) rotateY(270deg);
       }
-
       100% {
         transform: rotateX(0deg) rotateY(360deg);
       }
     }
 
     @keyframes text-wave {
-
-      0%,
-      100% {
+      0%, 100% {
         transform: translateY(0px);
       }
-
       20% {
         transform: translateY(-10px);
       }
-
       40% {
         transform: translateY(0px);
       }
-
       60% {
         transform: translateY(-5px);
       }
-
       80% {
         transform: translateY(0px);
       }
@@ -140,20 +121,15 @@
 
     .border-glass {
       border: 1.5px solid rgba(255, 255, 255, 0.25);
-      /* translucent white border */
       border-radius: 15px;
-      /* rounded corners */
       box-shadow: 0 4px 30px rgba(139, 69, 193, 0.2);
-      /* subtle purple glow shadow */
       backdrop-filter: blur(10px);
-      /* consistent with your glass effect */
       -webkit-backdrop-filter: blur(10px);
       transition: border-color 0.3s ease;
     }
 
     .border-glass:hover {
       border-color: rgba(139, 69, 193, 0.6);
-      /* stronger border on hover */
       box-shadow: 0 6px 40px rgba(139, 69, 193, 0.4);
     }
 
@@ -179,14 +155,12 @@
       animation: text-wave 2s ease-in-out infinite;
     }
 
-    /* Letter animation for title */
     .letter {
       display: inline-block;
       opacity: 0;
       transform: translateY(20px);
     }
 
-    /* Particle effects */
     .particle-trail {
       position: absolute;
       width: 4px;
@@ -197,7 +171,6 @@
       opacity: 0;
     }
 
-    /* Morphing backgrounds */
     .morph-bg {
       background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
       background-size: 400% 400%;
@@ -208,28 +181,23 @@
       0% {
         background-position: 0% 50%;
       }
-
       50% {
         background-position: 100% 50%;
       }
-
       100% {
         background-position: 0% 50%;
       }
     }
 
-    /* Glass morphism with animation */
     .glass-morph:hover {
       backdrop-filter: blur(15px);
       transform: translateY(-5px) scale(1.01);
     }
 
-    /* Magnetic hover effect */
     .magnetic-hover {
       transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
-    /* Holographic effect */
     .holographic {
       background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7);
       background-size: 300% 300%;
@@ -243,17 +211,14 @@
       0% {
         background-position: 0% 50%;
       }
-
       50% {
         background-position: 100% 50%;
       }
-
       100% {
         background-position: 0% 50%;
       }
     }
 
-    /* Navigation improvements */
     .nav-link {
       position: relative;
       overflow: hidden;
@@ -274,7 +239,6 @@
       left: 0;
     }
 
-    /* Navigation slide-in animation */
     .nav-slide-in {
       transform: translateY(-100%);
       opacity: 0;
@@ -286,7 +250,6 @@
       opacity: 1;
     }
 
-    /* Auth modal styles */
     .modal {
       display: none;
       position: fixed;
@@ -368,7 +331,6 @@
       color: white;
     }
 
-    /* Mobile Navigation Styles */
     .mobile-menu {
       position: fixed;
       top: 0;
@@ -420,6 +382,17 @@
       border-left-color: #667eea;
     }
 
+    .mobile-menu-toggle {
+      display: none;
+      z-index: 1001;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-menu-toggle {
+        display: flex !important;
+      }
+    }
+
     .hamburger {
       display: flex;
       flex-direction: column;
@@ -430,7 +403,7 @@
     .hamburger span {
       width: 25px;
       height: 3px;
-      background: #d1d5db;
+      background: #ffffff; /* Changed to white for better visibility */
       margin: 3px 0;
       transition: 0.3s ease;
       border-radius: 2px;
@@ -448,7 +421,6 @@
       transform: rotate(-45deg) translate(6px, -6px);
     }
 
-    /* Desktop Navigation - Hide on mobile */
     .desktop-nav {
       display: flex;
     }
@@ -456,10 +428,6 @@
     @media (max-width: 768px) {
       .desktop-nav {
         display: none;
-      }
-
-      .mobile-menu-toggle {
-        display: block !important;
       }
     }
   </style>
@@ -496,17 +464,16 @@
   <nav id="main-nav" class="fixed top-0 left-0 w-full bg-gray-900 bg-opacity-80 backdrop-blur-lg z-50 nav-slide-in">
     <div class="nav-container flex justify-between items-center px-6 md:px-10 py-4">
       <a href="index.html" class="nav-logo text-2xl font-bold text-cyan-300 hover:text-white transition-colors">
-        ChronoVerse 
+        ChronoVerse
       </a>
       
       <!-- Desktop Navigation -->
       <div class="desktop-nav nav-links flex space-x-6 text-base font-medium">
         <a href="index.html" class="nav-link text-gray-300 hover:text-white transition-colors">Home</a>
         <a href="home.html" id="createBtn" class="nav-link text-gray-300 hover:text-white transition-colors">Create</a>
-        <a href="explore.html" id="explorebtn"
-          class="nav-link text-gray-300 hover:text-white transition-colors">Explore</a>
+        <a href="explore.html" id="explorebtn" class="nav-link text-gray-300 hover:text-white transition-colors">Explore</a>
         <div id="auth-links" class="flex space-x-6"></div>
-        <a href="aboutus.html" class="nav-link text-gray-300 hover:text-white transition-colors pr-2 md:pr-2">About</a>
+        <a href="aboutus.html" class="nav-link text-gray-300 hover:text-white transition-colors pr-2 md: رک
       </div>
       
       <!-- Mobile Hamburger Menu -->
@@ -532,16 +499,12 @@
     <!-- Team Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
       <!-- Person 1 -->
-      <div
-        class="glass-morph border-glass p-8 rounded-2xl flex flex-col items-center shadow-xl magnetic-hover transition-transform duration-300">
-        <img src="https://api.dicebear.com/8.x/adventurer/svg?seed=Alexander"
-          class="w-32 h-32 rounded-full border-4 border-gradient-to-r from-purple-500 to-pink-500 mb-4 floating"
-          alt="Loki - Avatar" />
+      <div class="glass-morph border-glass p-8 rounded-2xl flex flex-col items-center shadow-xl magnetic-hover transition-transform duration-300">
+        <img src="https://api.dicebear.com/8.x/adventurer/svg?seed=Alexander" class="w-32 h-32 rounded-full border-4 border-gradient-to-r from-purple-500 to-pink-500 mb-4 floating" alt="Loki - Avatar" />
         <h2 class="text-2xl font-semibold mb-1">Loki</h2>
         <p class="text-purple-300 font-medium mb-3">Chief Storysmith & Multiversal Mischief Maker</p>
         <p class="text-gray-300 text-base mb-3">
-          Loki brings creativity, technical prowess, and a flair for twists to ChronoVerse . From building the back-end
-          engines to dreaming up the wildest alternate timelines, their vision shapes every page.
+          Loki brings creativity, technical prowess, and a flair for twists to ChronoVerse. From building the back-end engines to dreaming up the wildest alternate timelines, their vision shapes every page.
         </p>
         <ul class="text-gray-400 text-sm mt-2 mb-2">
           <li>• Lead JavaScript & AI Dev</li>
@@ -549,16 +512,12 @@
         </ul>
       </div>
       <!-- Person 2 -->
-      <div
-        class="glass-morph border-glass p-8 rounded-2xl flex flex-col items-center shadow-xl magnetic-hover transition-transform duration-300">
-        <img src="https://api.dicebear.com/8.x/adventurer/svg?seed=TheWatcher"
-          class="w-32 h-32 rounded-full border-4 border-gradient-to-r from-yellow-400 to-red-500 mb-4 floating"
-          alt="The Watcher - Avatar" />
+      <div class="glass-morph border-glass p-8 rounded-2xl flex flex-col items-center shadow-xl magnetic-hover transition-transform duration-300">
+        <img src="https://api.dicebear.com/8.x/adventurer/svg?seed=TheWatcher" class="w-32 h-32 rounded-full border-4 border-gradient-to-r from-yellow-400 to-red-500 mb-4 floating" alt="The Watcher - Avatar" />
         <h2 class="text-2xl font-semibold mb-1">The Watcher</h2>
         <p class="text-yellow-300 font-medium mb-3">Universe Explorer & Lore Archivist</p>
         <p class="text-gray-300 text-base mb-3">
-          The Watcher ensures every hero, villain, and world is meticulously chronicled, balancing design, lore
-          fidelity, and user experience. They connect stories across the multiverse for all explorers.
+          The Watcher ensures every hero, villain, and world is meticulously chronicled, balancing design, lore fidelity, and user experience. They connect stories across the multiverse for all explorers.
         </p>
         <ul class="text-gray-400 text-sm mt-2 mb-2">
           <li>• UX Designer & Animator</li>
@@ -567,26 +526,23 @@
       </div>
     </div>
 
-    <div
-      class="auth-section glass-morph p-8 rounded-2xl shadow-xl magnetic-hover transition-transform duration-300 max-w-2xl mx-auto mb-14 mt-6">
+    <div class="auth-section glass-morph p-8 rounded-2xl shadow-xl magnetic-hover transition-transform duration-300 max-w-2xl mx-auto mb-14 mt-6">
       <h3 class="text-2xl font-semibold mb-2">Our Mission</h3>
       <p class="text-gray-300 mb-2">
-        To empower creators across the multiverse to bring their characters to life through intuitive tools, vibrant
-        visuals, and AI-powered storytelling. Every hero. Every villain. Every story—matters.
+        To empower creators across the multiverse to bring their characters to life through intuitive tools, vibrant visuals, and AI-powered storytelling. Every hero. Every villain. Every story—matters.
       </p>
     </div>
   </div>
 
   <!-- Footer -->
   <footer class="w-full text-center text-sm text-gray-500 py-6 holographic">
-    © 2025 ChronoVerse  • Made by Loki & The Watcher
+    © 2025 ChronoVerse • Made by Loki & The Watcher
   </footer>
 
   <script type="module">
     // Navigation slide-in animation on page load
     window.addEventListener('load', () => {
       const nav = document.getElementById('main-nav');
-      // Small delay for dramatic effect
       setTimeout(() => {
         nav.classList.add('active');
       }, 300);
@@ -628,7 +584,7 @@
     }
 
     hamburger.addEventListener('click', toggleMobileMenu);
-    mobileOverlay.addEventListener('click', closeMobileMenu);
+    mobileOverlay.addEventListener 'click', closeMobileMenu);
 
     // Close mobile menu when clicking on links
     document.querySelectorAll('.mobile-nav-link').forEach(link => {
@@ -733,7 +689,6 @@
       setTimeout(() => message.remove(), 2000);
     }
 
-    // Auth check function for both desktop and mobile
     function checkAuthAndRedirect(e, targetPage = "home.html") {
       e.preventDefault();
       const user = auth.currentUser;
@@ -760,11 +715,8 @@
       updateNavLinks(user);
     });
 
-    // Desktop navigation events
     document.getElementById('createBtn').addEventListener('click', checkAuthAndRedirect);
     document.getElementById('explorebtn').addEventListener('click', checkAuthAndRedirectExplore);
-
-    // Mobile navigation events
     document.getElementById('createBtnMobile').addEventListener('click', checkAuthAndRedirect);
     document.getElementById('explorebtnMobile').addEventListener('click', checkAuthAndRedirectExplore);
 
@@ -794,8 +746,8 @@
       const material = new THREE.PointsMaterial({
         size: Math.random() * 3 + 1,
         color: colors[g % colors.length],
-        transparent: true,
-        opacity: 0.8,
+        transparent--; true,
+       In opacity: 0.8,
         blending: THREE.AdditiveBlending
       });
 
@@ -886,7 +838,7 @@
           x: 0,
           y: 0,
           duration: 0.3,
-          ease: "power2.out"
+          ease-: "power2.out"
         });
       });
 
@@ -899,7 +851,7 @@
     });
 
     // GSAP Timeline for main content animations
-    const tl = gsap.timeline({ delay: 1.2 }); // Delay to let nav slide in first
+    const tl = gsap.timeline({ delay: 1.2 });
     tl.from('.letter', {
       opacity: 0,
       y: 20,
@@ -915,13 +867,13 @@
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
       
-      // Close mobile menu on window resize to desktop
-      if (window.innerWidth > 768) {
+      // Ensure hamburger is visible on mobile after resize
+      if (window.innerWidth <= 768) {
+        document.querySelector('.mobile-menu-toggle').style.display = 'flex';
+      } else {
         closeMobileMenu();
       }
     });
   </script>
-
 </body>
-
 </html>
