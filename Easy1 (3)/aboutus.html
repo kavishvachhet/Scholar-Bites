@@ -421,7 +421,7 @@
     }
 
     .hamburger {
-      display: none;
+      display: flex;
       flex-direction: column;
       cursor: pointer;
       padding: 5px;
@@ -458,8 +458,8 @@
         display: none;
       }
 
-      .hamburger {
-        display: flex;
+      .mobile-menu-toggle {
+        display: block !important;
       }
     }
   </style>
@@ -510,10 +510,12 @@
       </div>
       
       <!-- Mobile Hamburger Menu -->
-      <div class="hamburger" id="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
+      <div class="mobile-menu-toggle md:hidden">
+        <div class="hamburger" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
     </div>
   </nav>
