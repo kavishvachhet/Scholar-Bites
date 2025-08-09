@@ -141,6 +141,8 @@
     .nav-link {
       position: relative;
       overflow: hidden;
+      padding: 0.5rem 1rem;
+      transition: color 0.3s ease;
     }
 
     .nav-link::before {
@@ -194,6 +196,9 @@
       .mobile-menu-toggle {
         display: block;
         z-index: 9999;
+        background: none;
+        border: none;
+        cursor: pointer;
       }
 
       .desktop-menu {
@@ -209,13 +214,13 @@
         background: rgba(17, 24, 39, 0.95);
         backdrop-filter: blur(12px);
         z-index: 9998;
-        transition: left 0.4s ease;
+        transition: left 0.3s ease-in-out;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
-        padding-top: 4rem;
-        gap: 2rem;
+        padding: 2rem;
+        gap: 1.5rem;
       }
 
       .mobile-nav.active {
@@ -223,16 +228,17 @@
       }
 
       .mobile-nav a {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
         font-weight: 500;
-        padding: 1rem 2rem;
-        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
         background: rgba(139, 69, 193, 0.15);
         width: 80%;
-        max-width: 300px;
+        max-width: 250px;
         text-align: center;
         transition: all 0.3s ease;
         color: #e5e7eb;
+        text-decoration: none;
       }
 
       .mobile-nav a:hover {
@@ -250,6 +256,7 @@
         border: none;
         cursor: pointer;
         padding: 0.5rem;
+        z-index: 10000;
       }
     }
 
@@ -366,15 +373,15 @@
       <a href="index.html" class="text-xl md:text-2xl font-bold text-cyan-300 hover:text-white transition-colors">
         ChronoVerse
       </a>
-      <button class="mobile-menu-toggle text-white text-2xl" id="mobile-toggle">
+      <button class="mobile-menu-toggle text-white text-2xl md:hidden" id="mobile-toggle">
         <span id="hamburger-icon">☰</span>
       </button>
-      <div class="desktop-menu hidden md:flex space-x-6 text-base font-medium">
+      <div class="desktop-menu hidden md:flex space-x-6 text-base font-medium items-center">
         <a href="index.html" class="nav-link text-gray-300 hover:text-white transition-colors">Home</a>
         <a href="home.html" id="createBtn" class="nav-link text-gray-300 hover:text-white transition-colors">Create</a>
         <a href="explore.html" id="explorebtn" class="nav-link text-gray-300 hover:text-white transition-colors">Explore</a>
-        <div id="auth-links" class="flex space-x-6"></div>
-        <a href="aboutus.html" class="nav-link text-gray-300 hover:text-white transition-colors pr-2 md:pr-2">About</a>
+        <div id="auth-links" class="flex space-x-4"></div>
+        <a href="aboutus.html" class="nav-link text-gray-300 hover:text-white transition-colors">About</a>
       </div>
     </div>
   </nav>
@@ -385,7 +392,7 @@
     <a href="index.html" class="nav-link">Home</a>
     <a href="home.html" id="mobile-createBtn" class="nav-link">Create</a>
     <a href="explore.html" id="mobile-explorebtn" class="nav-link">Explore</a>
-    <div id="mobile-auth-links" class="flex flex-col gap-2"></div>
+    <div id="mobile-auth-links" class="flex flex-col gap-2 w-full max-w-[250px]"></div>
     <a href="aboutus.html" class="nav-link">About</a>
   </div>
 
