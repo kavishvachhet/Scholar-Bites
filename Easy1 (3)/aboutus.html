@@ -511,7 +511,7 @@
         <div id="auth-links" class="flex space-x-6"></div>
         <a href="aboutus.html" class="nav-link text-gray-300 hover:text-white transition-colors pr-2 md:pr-2">About</a>
       </div>
-      <div class="hamburger md:hidden" id="hamburger">
+      <div class="hamburger" id="hamburger">
         <span></span>
         <span></span>
         <span></span>
@@ -720,6 +720,29 @@
         showMessage('To Explore Universe Sign In First', 'red');
         setTimeout(() => window.location.href = 'signin.html', 2000);
       }
+    });
+
+    document.getElementById('createBtnMobile').addEventListener('click', (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (user) {
+        window.location.href = 'home.html';
+      } else {
+        showMessage('Please Sign In First', 'red');
+        setTimeout(() => window.location.href = 'signin.html', 2000);
+      }
+      closeMobileMenu();
+    });
+    document.getElementById('explorebtnMobile').addEventListener('click', (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (user) {
+        window.location.href = 'explore.html';
+      } else {
+        showMessage('To Explore Universe Sign In First', 'red');
+        setTimeout(() => window.location.href = 'signin.html', 2000);
+      }
+      closeMobileMenu();
     });
 
     // Mobile Menu Toggle Functionality
