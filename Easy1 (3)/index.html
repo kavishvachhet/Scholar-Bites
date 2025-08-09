@@ -3,233 +3,77 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=5.0" />
-  <title>ChronoVerse  - Loki's Character Chronicles</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Character Story Generator - Epic Character Creation</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <script src="https://unpkg.com/three@0.152.0/build/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script type="module" src="js/character.js"></script>
 
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
+    /* [Previous CSS remains unchanged] */
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #111827;
+      color: white;
       overflow-x: hidden;
+      min-height: 100vh;
     }
 
-    @media (max-width: 768px) {
-      .spacer { 
-        height: 8cm;
-      }
-    }
-
-    .auth-section {
-      border: 2px solid transparent;
-      border-image: linear-gradient(45deg, #9333ea, #ec4899) 1;
-      border-image-slice: 1;
-      background-clip: padding-box;
-      border-radius: 20px;
-      animation: gradient-border 4s linear infinite;
-    }
-
-    @keyframes gradient-border {
-      0% {
-        border-image-source: linear-gradient(45deg, #9333ea, #ec4899);
-      }
-      100% {
-        border-image-source: linear-gradient(45deg, #ec4899, #9333ea);
-      }
-    }
-
-    .scrollbar-hide::-webkit-scrollbar {
-      display: none;
-    }
-
-    .scrollbar-hide {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-
-    /* Advanced CSS Animations */
+    /* Animations */
     @keyframes floating {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-20px); }
-    }
 
-    /* Mobile Navigation Styles - UPDATED */
-    .mobile-menu {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 280px;
-      height: 100vh;
-      background: rgba(17, 24, 39, 0.95);
-      backdrop-filter: blur(20px);
-      transition: right 0.3s ease;
-      z-index: 1000;
-      padding-top: 80px;
-    }
-
-    .mobile-menu.active {
-      right: 0;
-    }
-
-    .mobile-menu-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      z-index: 999;
-    }
-
-    .mobile-menu-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .mobile-nav-link {
-      display: block;
-      padding: 15px 25px;
-      color: #d1d5db;
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      border-left: 3px solid transparent;
-    }
-
-    .mobile-nav-link:hover {
-      color: #ffffff;
-      background: rgba(102, 126, 234, 0.1);
-      border-left-color: #667eea;
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-      padding: 5px;
-    }
-
-    .hamburger span {
-      width: 25px;
-      height: 3px;
-      background: #d1d5db;
-      margin: 3px 0;
-      transition: 0.3s ease;
-      border-radius: 2px;
-    }
-
-    .hamburger.active span:nth-child(1) {
-      transform: rotate(45deg) translate(6px, 6px);
-    }
-
-    .hamburger.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(6px, -6px);
-    }
-
-    /* Desktop Navigation - Hide on mobile */
-    .desktop-nav {
-      display: flex;
-    }
-
-    @media (max-width: 768px) {
-      .desktop-nav {
-        display: none;
+      0%,
+      100% {
+        transform: translateY(0px);
       }
 
-      .hamburger {
-        display: flex;
+      50% {
+        transform: translateY(-20px);
       }
     }
 
     @keyframes pulse-glow {
-      0%, 100% {
+
+      0%,
+      100% {
         box-shadow: 0 0 20px rgba(139, 69, 193, 0.5);
         transform: scale(1);
       }
+
       50% {
         box-shadow: 0 0 40px rgba(139, 69, 193, 0.8);
         transform: scale(1.05);
       }
     }
 
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
+    @keyframes holographic-shift {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
     }
 
-    @keyframes rotate-3d {
-      0% { transform: rotateX(0deg) rotateY(0deg); }
-      25% { transform: rotateX(10deg) rotateY(90deg); }
-      50% { transform: rotateX(0deg) rotateY(180deg); }
-      75% { transform: rotateX(-10deg) rotateY(270deg); }
-      100% { transform: rotateX(0deg) rotateY(360deg); }
+    .floating {
+      animation: floating 3s ease-in-out infinite;
     }
 
-    @keyframes text-wave {
-      0%, 100% { transform: translateY(0px); }
-      20% { transform: translateY(-10px); }
-      40% { transform: translateY(0px); }
-      60% { transform: translateY(-5px); }
-      80% { transform: translateY(0px); }
-    }
-
-    .floating { animation: floating 3s ease-in-out infinite; }
-    .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-    .shimmer-effect {
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      background-size: 200% 100%;
-      animation: shimmer 2s linear infinite;
-    }
-    .rotate-3d { animation: rotate-3d 4s linear infinite; }
-    .text-wave { animation: text-wave 2s ease-in-out infinite; }
-
-    .letter {
-      display: inline-block;
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    .particle-trail {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: #8b45c1;
-      border-radius: 50%;
-      pointer-events: none;
-      opacity: 0;
-    }
-
-    .morph-bg {
-      background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
-      background-size: 400% 400%;
-      animation: gradient-morph 8s ease infinite;
-    }
-
-    @keyframes gradient-morph {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .glass-morph:hover {
-      backdrop-filter: blur(15px);
-      transform: translateY(-5px) scale(1.01);
-    }
-
-    .magnetic-hover {
-      transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    .pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
     }
 
     .holographic {
@@ -237,71 +81,425 @@
       background-size: 300% 300%;
       animation: holographic-shift 3s ease infinite;
       -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
       background-clip: text;
+      color: transparent;
+    }
+
+    /* Glass morphism */
+    .glass-morph {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .glass-morph:hover {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      transform: translateY(-5px) scale(1.02);
+    }
+
+    /* Container and Layout */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 6rem 0 0 0;
+    }
+
+    .header h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      color: #9ca3af;
+      margin-top: 1rem;
+    }
+
+    /* Auth Section */
+    .auth-section {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      transition: all 0.3s ease;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #8b45c1, #667eea);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .welcome-message {
+      margin: 0 0 0.5rem 0;
+      color: #f3f4f6;
+      font-size: 1.1rem;
+    }
+
+    /* Main Content */
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
     }
 
     @media (max-width: 768px) {
-      body {
-        font-size: 16px;
-        -webkit-tap-highlight-color: transparent;
-      }
-
-      #three-canvas { opacity: 0.6; }
-
-      button, .btn {
-        min-height: 44px;
-        padding: 12px 16px;
-      }
-
-      .holographic {
-        font-size: 2.5rem !important;
-        line-height: 1.2;
-      }
-
-      .auth-buttons {
-        flex-direction: column;
-        gap: 1rem;
-      }
-
-      .auth-buttons button,
-      .auth-buttons a {
-        width: 100%;
-      }
-
-      .modal-content {
-        width: 95%;
-        max-height: 90vh;
-        overflow-y: auto;
+      .main-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
       }
     }
 
-    @keyframes holographic-shift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* Form Section */
+    .form-section {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.3s ease;
     }
 
-    .nav-link {
-      position: relative;
-      overflow: hidden;
+    .form-section h2 {
+      color: #f3f4f6;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 600;
     }
 
-    .nav-link::before {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: -100%;
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #d1d5db;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
       width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, #8b45c1, #667eea);
-      transition: left 0.3s ease;
+      padding: 0.875rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      box-sizing: border-box;
     }
 
-    .nav-link:hover::before {
-      left: 0;
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #8b45c1;
+      box-shadow: 0 0 0 3px rgba(139, 69, 193, 0.2);
+      background: rgba(255, 255, 255, 0.15);
     }
 
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #9ca3af;
+    }
+
+    /* Image Upload */
+    .image-upload {
+      position: relative;
+    }
+
+    .image-upload input[type="file"] {
+      display: none;
+    }
+
+    .image-upload-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      border: 2px dashed rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #d1d5db;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .image-upload-label:hover {
+      border-color: #8b45c1;
+      background: rgba(139, 69, 193, 0.1);
+    }
+
+    .image-preview {
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .image-preview img {
+      max-width: 200px;
+      border-radius: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 0.875rem 1.5rem;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, #8b45c1, #667eea);
+      color: white;
+      box-shadow: 0 4px 15px rgba(139, 69, 193, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(139, 69, 193, 0.6);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #d1d5db;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: linear-gradient(45deg, #ef4444, #dc2626);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    /* Characters Section */
+    .characters-section {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .characters-section h2 {
+      color: #f3f4f6;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .search-filter {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-filter input,
+    .search-filter select {
+      flex: 1;
+      padding: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      backdrop-filter: blur(5px);
+      box-sizing: border-box;
+    }
+
+    .stats {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      display: block;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #8b45c1;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      color: #9ca3af;
+      font-size: 0.875rem;
+    }
+
+    .characters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .character-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .character-card:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 10px 30px rgba(139, 69, 193, 0.3);
+    }
+
+    .character-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .character-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #f3f4f6;
+      margin-bottom: 0.5rem;
+    }
+
+    .character-universe {
+      color: #8b45c1;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+
+    .character-backstory {
+      color: #9ca3af;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .character-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .character-actions .btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+
+    /* Story Section */
+    .story-section {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      transition: all 0.3s ease;
+    }
+
+    .story-section h2 {
+      color: #f3f4f6;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .story-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .story-header h3 {
+      color: #f3f4f6;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .story-universe {
+      color: #8b45c1;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .story-content {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: #d1d5db;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    .story-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -310,8 +508,8 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.8);
-      z-index: 1000;
       backdrop-filter: blur(10px);
+      z-index: 1000;
     }
 
     .modal.active {
@@ -322,564 +520,1485 @@
 
     .modal-content {
       background: rgba(30, 30, 30, 0.95);
-      padding: 2rem;
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 20px;
-      border: 1px solid rgba(139, 69, 193, 0.3);
-      max-width: 400px;
-      width: 90%;
-      transform: scale(0.7);
-      opacity: 0;
-      transition: all 0.3s ease;
-    }
-
-    .modal.active .modal-content {
-      transform: scale(1);
-      opacity: 1;
-    }
-
-    .wizard-section {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      backdrop-filter: blur(10px);
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .wizard-content {
+      padding: 2rem;
       max-width: 600px;
       width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #9ca3af;
+      transition: color 0.3s ease;
+    }
+
+    .close:hover {
+      color: #f3f4f6;
+    }
+
+    /* Message */
+    .message {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      z-index: 1001;
+      font-weight: 500;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    .message.success {
+      background: rgba(16, 185, 129, 0.9);
+      color: white;
+    }
+
+    .message.error {
+      background: rgba(239, 68, 68, 0.9);
+      color: white;
+    }
+
+    /* Loading State */
+    .loading {
+      text-align: center;
+      color: #9ca3af;
+      font-style: italic;
       padding: 2rem;
+    }
+
+    /* Letter animation for title */
+    .letter {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    /* Navigation Bar */
+    nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(17, 24, 39, 0.9);
+  backdrop-filter: blur(10px);
+  z-index: 50;
+  padding: 1rem 0;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #3b82f6;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav-logo:hover {
+  color: #ffffff;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-links a,
+.nav-links button {
+  color: #d1d5db;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 4px; /* Add some space for the line */
+}
+
+/* Individual hover line effect */
+.nav-links a::before,
+.nav-links button::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #8b45c1, #667eea);
+  transition: left 0.3s ease;
+}
+
+.nav-links a:hover::before,
+.nav-links button:hover::before {
+  left: 0;
+}
+
+.nav-links a:hover,
+.nav-links button:hover {
+  color: #ffffff;
+}
+
+    /* Mobile Menu */
+    .mobile-menu-toggle {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #d1d5db;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2.5rem;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(17, 24, 39, 0.9);
+        padding: 1rem;
+        gap: 1rem;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .mobile-menu-toggle {
+        display: block;
+      }
+
+      .search-filter {
+        flex-direction: column;
+      }
+
+      .stats {
+        justify-content: center;
+      }
+
+      .characters-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .story-actions {
+        flex-direction: column;
+      }
+    }
+
+    /* Particle Trail */
+    .particle-trail {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: linear-gradient(45deg, #8b45c1, #667eea);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    /* Wizard Specific Styles */
+    .wizard-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 20px;
-      background: rgba(30, 30, 30, 0.95);
-      border: 1px solid rgba(139, 69, 193, 0.3);
+      padding: 2rem;
+      margin: 6rem auto 3rem;
+      min-height: 600px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-container {
+      margin-bottom: 3rem;
+    }
+
+    .progress-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .progress-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.2);
+      z-index: 1;
+    }
+
+    .progress-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #8b45c1, #667eea);
+      transition: width 0.6s ease;
+      border-radius: 1px;
+    }
+
+    .step {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .step.active {
+      background: linear-gradient(45deg, #8b45c1, #667eea);
+      border-color: rgba(255, 255, 255, 0.3);
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    .step.completed {
+      background: linear-gradient(45deg, #10b981, #059669);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .step-number {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .step-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+    }
+
+    .step-label {
+      font-size: 0.875rem;
+      color: #9ca3af;
+      text-align: center;
+      max-width: 80px;
+    }
+
+    .step-label.active {
+      color: #8b45c1;
+      font-weight: 600;
     }
 
     .wizard-step {
       display: none;
+      min-height: 400px;
     }
 
     .wizard-step.active {
       display: block;
     }
 
-    .form-group {
+    .step-content {
+      text-align: center;
+      padding: 2rem 0;
+    }
+
+    .step-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.8;
+    }
+
+    .step-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, #8b45c1, #667eea);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .step-description {
+      font-size: 1.1rem;
+      color: #9ca3af;
+      margin-bottom: 2rem;
+    }
+
+    .universe-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .universe-card {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .universe-card:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-5px);
+      border-color: #8b45c1;
+    }
+
+    .universe-card.selected {
+      border-color: #8b45c1;
+      background: rgba(139, 69, 193, 0.2);
+      box-shadow: 0 0 20px rgba(139, 69, 193, 0.3);
+    }
+
+    .universe-icon {
+      font-size: 2.5rem;
       margin-bottom: 1rem;
     }
 
+    .universe-card h3 {
+      color: #f3f4f6;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .universe-card p {
+      color: #9ca3af;
+      font-size: 0.9rem;
+    }
+
+    .wizard-form {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #d1d5db;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
     .form-group input,
-    .form-group select,
     .form-group textarea {
       width: 100%;
-      padding: 0.75rem;
-      border-radius: 8px;
-      background: rgba(50, 50, 50, 0.8);
-      border: 1px solid rgba(139, 69, 193, 0.3);
+      padding: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
       color: white;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      font-family: inherit;
     }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #8b45c1;
+      box-shadow: 0 0 0 3px rgba(139, 69, 193, 0.2);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #9ca3af;
+    }
+
+    .image-upload-wizard {
+      max-width: 400px;
+      margin: 2rem auto;
+    }
+
+    .upload-area {
+      border: 2px dashed rgba(255, 255, 255, 0.3);
+      border-radius: 15px;
+      padding: 3rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .upload-area:hover {
+      border-color: #8b45c1;
+      background: rgba(139, 69, 193, 0.1);
+    }
+
+    .upload-area input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.7;
+    }
+
+    .upload-area h3 {
+      color: #f3f4f6;
+      margin-bottom: 0.5rem;
+    }
+
+    .upload-area p {
+      color: #9ca3af;
+      font-size: 0.9rem;
+    }
+
+    .image-preview-wizard {
+      position: relative;
+      margin-top: 1rem;
+    }
+
+    .image-preview-wizard img {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-remove {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 30px;
+      height: 30px;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wizard-navigation {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .wizard-info {
+      color: #9ca3af;
+      font-size: 0.9rem;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 768px) {
+      .wizard-container {
+        padding: 1rem;
+        margin-top: 5rem;
+      }
+
+      .step-title {
+        font-size: 2rem;
+      }
+
+      .universe-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .wizard-navigation {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .step {
+        width: 40px;
+        height: 40px;
+      }
+
+      .step-number {
+        font-size: 1rem;
+      }
+    }
+
+    /* ===== CSS ADDITIONS/MODIFICATIONS ===== */
+
+/* Enhanced Mobile Menu Styles - Add this to your existing CSS */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #d1d5db;
+  transition: all 0.3s ease;
+  z-index: 1001;
+  position: relative;
+}
+
+.mobile-menu-toggle:hover {
+  color: #8b45c1;
+  transform: scale(1.1);
+}
+
+/* Hamburger Icon Animation */
+.hamburger {
+  width: 25px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #d1d5db;
+  margin: 4px 0;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Mobile Navigation Overlay */
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-nav-overlay.active {
+  opacity: 1;
+}
+
+/* Enhanced Mobile Menu */
+.nav-links.mobile {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 280px;
+  height: 100vh;
+  background: rgba(17, 24, 39, 0.95);
+  backdrop-filter: blur(15px);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 80px 0 40px 0;
+  gap: 0;
+  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+}
+
+.nav-links.mobile.active {
+  right: 0;
+}
+
+.nav-links.mobile a,
+.nav-links.mobile button {
+  width: 100%;
+  padding: 20px 30px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: visible;
+}
+
+.nav-links.mobile a:hover,
+.nav-links.mobile button:hover {
+  background: rgba(139, 69, 193, 0.1);
+  transform: translateX(10px);
+}
+
+.nav-links.mobile a::before,
+.nav-links.mobile button::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #8b45c1, #667eea);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.nav-links.mobile a:hover::before,
+.nav-links.mobile button:hover::before {
+  transform: scaleY(1);
+}
+
+/* Mobile Menu Close Button */
+.mobile-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #d1d5db;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mobile-close:hover {
+  color: #8b45c1;
+  transform: rotate(90deg);
+}
+
+/* MODIFY YOUR EXISTING RESPONSIVE SECTION */
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2.5rem;
+  }
+
+  /* Hide desktop nav links on mobile */
+  .nav-links {
+    display: none;
+  }
+
+  /* Show mobile menu toggle */
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  /* Show mobile navigation overlay when active */
+  .mobile-nav-overlay {
+    display: block;
+  }
+
+  .search-filter {
+    flex-direction: column;
+  }
+
+  .stats {
+    justify-content: center;
+  }
+
+  .characters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .story-actions {
+    flex-direction: column;
+  }
+}
   </style>
 </head>
 
-<body class="bg-gray-900 text-white overflow-x-hidden relative transition-colors duration-500">
-  <!-- 3D Background Canvas -->
-  <div id="three-canvas" class="fixed top-0 left-0 w-full h-full z-[-1]"></div>
+<body>
+  <div id="three-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+  <div id="particle-container"
+    style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;"></div>
+  <div class="container">
+    <header class="header floating">
+      <h1 class="holographic">⚔ ChronoVerse </h1>
+      <p>Create epic characters and generate their legendary stories</p>
+    </header>
+    
 
-  <!-- Particle Trail Container -->
-  <div id="particle-container" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></div>
-
-  <!-- Mobile Menu Overlay - ADDED -->
-  <div class="mobile-menu-overlay" id="mobile-overlay"></div>
-
-  <!-- Mobile Menu - ADDED -->
-  <div class="mobile-menu" id="mobile-menu">
-    <a href="index.html" class="mobile-nav-link">
-      <i class="fas fa-home mr-3"></i>Home
-    </a>
-    <a href="home.html" class="mobile-nav-link" id="mobile-createBtn">
-      <i class="fas fa-plus mr-3"></i>Create
-    </a>
-    <a href="explore.html" class="mobile-nav-link" id="mobile-explorebtn">
-      <i class="fas fa-compass mr-3"></i>Explore
-    </a>
-    <div id="mobile-auth-links"></div>
-    <a href="aboutus.html" class="mobile-nav-link">
-      <i class="fas fa-info-circle mr-3"></i>About
-    </a>
-  </div>
-
-  <!-- Navigation Bar - UPDATED -->
-  <nav class="fixed top-0 left-0 w-full bg-gray-900 bg-opacity-80 backdrop-blur-lg z-50">
-    <div class="flex justify-between items-center px-6 md:px-10 py-4">
-      <!-- Left Side: Logo -->
-      <a href="index.html" class="text-2xl font-bold text-cyan-300 hover:text-white transition-colors">
-        ChronoVerse 
-      </a>
-
-      <!-- Desktop Navigation - UPDATED -->
-      <div class="desktop-nav space-x-6 text-base font-medium">
-        <a href="index.html" class="nav-link text-gray-300 hover:text-white transition-colors">Home</a>
-        <a href="home.html" id="createBtn" class="nav-link text-gray-300 hover:text-white transition-colors">Create</a>
-        <a href="explore.html" id="explorebtn" class="nav-link text-gray-300 hover:text-white transition-colors">Explore</a>
-        <!-- Dynamic Auth Links -->
-        <div id="auth-links" class="flex space-x-6">
-          <!-- Links will be dynamically added here based on auth state -->
-        </div>
-        <a href="aboutus.html" class="nav-link text-gray-300 hover:text-white transition-colors pr-2 md:pr-2">About</a>
-      </div>
-
-      <!-- Mobile Hamburger Menu - ADDED -->
+   <!-- REPLACE YOUR EXISTING NAV SECTION WITH THIS: -->
+<nav>
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">ChronoVerse</a>
+    
+    <!-- Desktop Navigation Links -->
+    <div class="nav-links desktop">
+      <a href="index.html">Home</a>
+      <a href="#" id="createBtn">Create</a>
+      <a href="explore.html">Explore</a>
+      <button onclick="signOut()">Sign Out</button>
+      <a href="aboutus.html">About</a>
+    </div>
+    
+    <!-- Mobile Menu Toggle -->
+    <div class="mobile-menu-toggle" id="mobile-menu-toggle">
       <div class="hamburger" id="hamburger">
         <span></span>
         <span></span>
         <span></span>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  
+<!-- Mobile Navigation Overlay -->
+<div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
 
-  <!-- Main Container -->
-  <div class="container mx-auto px-4 py-12 max-w-5xl text-center relative z-10 mt-20">
-    <header class="mb-12 floating">
-    <!-- ChronoVerse title with letter animation -->
-    <h1 class="text-5xl sm:text-7xl font-bold mb-6 holographic">
-      <span class="letter">C</span>
-      <span class="letter">h</span>
-      <span class="letter">r</span>
-      <span class="letter">o</span>
-      <span class="letter">n</span>
-      <span class="letter">o</span>
-      <span class="letter">V</span>
-      <span class="letter">e</span>
-      <span class="letter">r</span>
-      <span class="letter">s</span>
-      <span class="letter">e</span>
-    </h1>
-    
-    
-    <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-4">Where legendary characters are born and epic stories unfold</p>
-    <p class="text-md text-gray-400 max-w-xl mx-auto shimmer-effect">
-      Join Loki and The Watcher in chronicling the multiverse's greatest heroes and villains
-    </p>
-  </header>
+<!-- Mobile Navigation Menu -->
+<div class="nav-links mobile" id="mobile-nav">
+  <button class="mobile-close" id="mobile-close">×</button>
+  <a href="index.html">🏠 Home</a>
+  <a href="#" id="createBtnMobile">⚔️ Create</a>
+  <a href="explore.html">🔍 Explore</a>
+  <button onclick="signOut(); closeMobileMenu();">🚪 Sign Out</button>
+  <a href="aboutus.html">ℹ️ About</a>
+</div>
 
-
-    <!-- Feature Cards -->
-    <div class="grid md:grid-cols-3 gap-6 mb-12">
-      <div class="glass-morph p-6 rounded-2xl transition-transform duration-300 hover:scale-105">
-        <div class="text-4xl mb-4">⚔️</div>
-        <h3 class="text-xl font-semibold mb-2">Create Characters</h3>
-        <p class="text-gray-300">Forge legendary heroes and villains with detailed backstories, powers, and weaknesses</p>
-      </div>
-      <div class="glass-morph p-6 rounded-2xl transition-transform duration-300 hover:scale-105">
-        <div class="text-4xl mb-4">🤖</div>
-        <h3 class="text-xl font-semibold mb-2">AI Story Generation</h3>
-        <p class="text-gray-300">Watch as AI weaves epic narratives from your character's details</p>
-      </div>
-      <div class="glass-morph p-6 rounded-2xl transition-transform duration-300 hover:scale-105">
-        <div class="text-4xl mb-4">🌌</div>
-        <h3 class="text-xl font-semibold mb-2">Multiverse Explorer</h3>
-        <p class="text-gray-300">Browse and discover characters across infinite timelines and realities</p>
+    <div class="auth-section glass-morph">
+      <div id="user-section">
+        <div class="user-info">
+          <div class="user-avatar pulse-glow" id="user-avatar">U</div>
+          <div>
+            <h4 id="user-name" class="welcome-message">
+              Hello, <span id="user-firstname">Loading...</span>!
+            </h4>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="spacer"></div>
+    <div class="wizard-container glass-morph">
+      <form id="character-form">
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-line">
+              <div class="progress-fill" id="progress-fill" style="width: 20%;"></div>
+            </div>
+            <div class="step active" id="step-1">
+              <span class="step-number">1</span>
+            </div>
+            <div class="step" id="step-2">
+              <span class="step-number">2</span>
+            </div>
+            <div class="step" id="step-3">
+              <span class="step-number">3</span>
+            </div>
+            <div class="step" id="step-4">
+              <span class="step-number">4</span>
+            </div>
+            <div class="step" id="step-5">
+              <span class="step-number">5</span>
+            </div>
+          </div>
+          <div class="step-labels">
+            <div class="step-label active">Basic Info</div>
+            <div class="step-label">Universe</div>
+            <div class="step-label">Backstory</div>
+            <div class="step-label">Powers</div>
+            <div class="step-label">Image</div>
+          </div>
+        </div>
 
-    <div class="auth-section glass-morph p-8 rounded-2xl shadow-xl mb-10 magnetic-hover transition-transform duration-300" style="border-radius: 2rem;">
-      <h3 class="text-2xl font-semibold mb-4">Begin Your Multiverse Journey</h3>
-      <p class="text-gray-300 mb-6">Sign up to start creating characters, generating stories, and exploring the endless
-        possibilities of the multiverse</p>
-      <div class="flex justify-center gap-4 flex-wrap">
-        <button id="demo-btn"
-          class="bg-gradient-to-r from-green-500 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:from-teal-500 hover:to-green-500 transition-all duration-300 pulse-glow magnetic-hover">
-          ⚡ Try Demo
-        </button>
-        <a href="signin.html" id="get-started-btn"
-          class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 magnetic-hover inline-block">
-          🚀 Get Started
-        </a>
-        <a href="aboutus.html"
-          class="bg-gradient-to-r from-yellow-400 to-red-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:from-yellow-500 hover:to-red-600 transition-all duration-300 magnetic-hover">
-          🧠 About Us
-        </a>
-      </div>
+        <!-- Wizard Step 1 -->
+        <div class="wizard-step active" id="wizard-step-1">
+          <div class="step-content slide-in-left">
+            <div class="step-icon">⚔️</div>
+            <h2 class="step-title">Meet Your Heroes</h2>
+            <p class="step-description">Let's start with the essentials of your legendary character</p>
+            <div class="wizard-form">
+              <div class="form-group">
+                <label for="name">Character Name *</label>
+                <input type="text" id="name" name="name" placeholder="Enter your character's name..." required />
+              </div>
+              <div class="form-group">
+                <label for="title">Title/Alias *</label>
+                <input type="text" id="title" name="title" placeholder="The Dark Knight, The Last Jedi, etc..."
+                  required />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wizard Step 2 -->
+        <div class="wizard-step" id="wizard-step-2">
+          <div class="step-content slide-in-right">
+            <div class="step-icon">🌌</div>
+            <h2 class="step-title">Choose Universe</h2>
+            <p class="step-description">Select the world where your character belongs</p>
+            <div class="universe-grid">
+              <div class="universe-card" data-universe="Marvel">
+                <div class="universe-icon">🦸‍♂️</div>
+                <h3>Marvel</h3>
+                <p>Heroes and villains with extraordinary powers</p>
+              </div>
+              <div class="universe-card" data-universe="DC">
+                <div class="universe-icon">🦇</div>
+                <h3>DC</h3>
+                <p>Iconic superheroes and cosmic adventures</p>
+              </div>
+              <div class="universe-card" data-universe="Star Wars">
+                <div class="universe-icon">⚔️</div>
+                <h3>Star Wars</h3>
+                <p>Jedi, Sith, and galactic conflicts</p>
+              </div>
+              <div class="universe-card" data-universe="Fantasy">
+                <div class="universe-icon">🧙‍♂️</div>
+                <h3>Fantasy</h3>
+                <p>Magic, dragons, and mythical realms</p>
+              </div>
+              <div class="universe-card" data-universe="Anime">
+                <div class="universe-icon">⚡</div>
+                <h3>Anime</h3>
+                <p>Unique powers and epic storylines</p>
+              </div>
+              <div class="universe-card" data-universe="Custom">
+                <div class="universe-icon">✨</div>
+                <h3>Custom</h3>
+                <p>Create your own unique universe</p>
+              </div>
+            </div>
+            <input type="hidden" id="universe" name="universe" value="" />
+            <div class="form-group hidden" id="custom-universe-group">
+              <label for="customUniverse">Custom Universe Name</label>
+              <input type="text" id="customUniverse" name="customUniverse"
+                placeholder="Enter your custom universe name..." />
+            </div>
+          </div>
+        </div>
+
+        <!-- Wizard Step 3 -->
+        <div class="wizard-step" id="wizard-step-3">
+          <div class="step-content fade-in-up">
+            <div class="step-icon">📖</div>
+            <h2 class="step-title">Origin Story</h2>
+            <p class="step-description">Every legend has a beginning. What's theirs?</p>
+            <div class="wizard-form">
+              <div class="form-group">
+                <label for="backstory">Character Backstory *</label>
+                <textarea id="backstory" name="backstory" rows="6"
+                  placeholder="Tell us about your character's origin story, their past, what made them who they are today..."
+                  required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="motivation">What drives them? *</label>
+                <input type="text" id="motivation" name="motivation"
+                  placeholder="Justice, revenge, protecting loved ones..." required />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wizard Step 4 -->
+        <div class="wizard-step" id="wizard-step-4">
+          <div class="step-content slide-in-left">
+            <div class="step-icon">💫</div>
+            <h2 class="step-title">Powers & Weaknesses</h2>
+            <p class="step-description">What makes your character extraordinary?</p>
+            <div class="wizard-form">
+              <div class="form-group">
+                <label for="powers">Powers & Abilities *</label>
+                <textarea id="powers" name="powers" rows="4"
+                  placeholder="Super strength, magic spells, advanced technology, martial arts..." required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="weaknesses">Weaknesses & Limitations *</label>
+                <textarea id="weaknesses" name="weaknesses" rows="3"
+                  placeholder="Kryptonite, fear of spiders, limited energy, moral code..." required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="fights">Notable Battles *</label>
+                <textarea id="fights" name="fights" rows="3"
+                  placeholder="Epic confrontations, rivalries, major conflicts..." required></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wizard Step 5 -->
+        <div class="wizard-step" id="wizard-step-5">
+          <div class="step-content slide-in-right">
+            <div class="step-icon">🎨</div>
+            <h2 class="step-title">Character Portrait</h2>
+            <p class="step-description">Bring your character to life with an image</p>
+            <div class="image-upload-wizard">
+              <div class="upload-area" id="upload-area">
+                <div class="upload-icon">📸</div>
+                <h3>Drop your image here</h3>
+                <p>or click to browse</p>
+                <input type="file" id="image" name="image"
+                  accept="image/*,.jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.tiff,.ico" required />
+              </div>
+              <div class="image-preview-wizard hidden" id="image-preview">
+                <img id="imagePreview" alt="Character preview" />
+                <input type="hidden" id="imageURL" name="imageURL" />
+                <button type="button" class="btn-remove" onclick="removeImage()">×</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="wizard-navigation">
+          <button type="button" class="btn btn-secondary" id="prev-btn" onclick="previousStep()" disabled>
+            <i class="fas fa-arrow-left"></i> Previous
+          </button>
+          <div class="wizard-info">
+            <span id="step-counter">Step 1 of 5</span>
+          </div>
+          <button type="button" class="btn btn-primary" id="next-btn" onclick="nextStep()">
+            Next <i class="fas fa-arrow-right"></i>
+          </button>
+          <button type="submit" class="btn btn-primary pulse-glow hidden" id="submit-btn">
+            <i class="fas fa-magic"></i> <span id="submit-text">Create Character & Generate Story</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+   
+  </div>
+  </div>
+  </div>
+
+  <!-- <div id="story-section" class="story-section glass-morph hidden">
+    <h2>Generated Story</h2>
+    <div class="story-header">
+      <h3 id="story-character-name"></h3>
+      <div id="story-character-universe" class="story-universe"></div>
+    </div>
+    <div id="story-content" class="story-content"></div>
+    <div class="story-actions">
+      <button class="btn btn-primary" onclick="regenerateStory()">Regenerate Story</button>
+      <button class="btn btn-danger" onclick="delstory()">Delete Story</button>
+      <button class="btn btn-secondary" onclick="hideStory()">Close Story</button>
+    </div>
+  </div> -->
+
+  <div id="character-modal" class="modal hidden">
+    <div class="modal-content glass-morph">
+      <span class="close" onclick="closeModal()">×</span>
+      <div id="modal-body"></div>
     </div>
   </div>
 
-  <!-- Scripts -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+  <div id="message-container" class="message" style="display: none;"></div>
+  </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCYI3WQ9-peR0HEPxhrxCrsAEg2wn9QoDY",
-      authDomain: "character-generator-75fdf.firebaseapp.com",
-      projectId: "character-generator-75fdf",
-      storageBucket: "character-generator-75fdf.appspot.com",
-      messagingSenderId: "233443409399",
-      appId: "1:233443409399:web:d6757f2a53db4388bc82f2",
-      measurementId: "G-F8TEK5KSNV"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // Mobile menu functionality - UPDATED
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileOverlay = document.getElementById('mobile-overlay');
-
-    function toggleMobileMenu() {
-      hamburger.classList.toggle('active');
-      mobileMenu.classList.toggle('active');
-      mobileOverlay.classList.toggle('active');
-      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+  <script>
+    // Validate file types and sizes
+    function validateImageFile(file) {
+      const allowedTypes = [
+        'image/jpeg', 'image/jpg', 'image/png', 'image/gif',
+        'image/webp', 'image/svg+xml', 'image/bmp',
+        'image/tiff', 'image/x-icon', 'image/vnd.microsoft.icon'
+      ];
+      const maxSize = 5 * 1024 * 1024; 
+      if (!allowedTypes.includes(file.type)) {
+        return { valid: false, error: 'Unsupported image format. Please use JPG, PNG, GIF, WebP, SVG, BMP, TIFF, or ICO.' };
+      }
+      if (file.size > maxSize) {
+        return { valid: false, error: 'Image size must be less than 5MB.' };
+      }
+      return { valid: true };
     }
 
-    function closeMobileMenu() {
-      hamburger.classList.remove('active');
-      mobileMenu.classList.remove('active');
-      mobileOverlay.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    // Event Listeners - UPDATED
-    hamburger.addEventListener('click', toggleMobileMenu);
-    mobileOverlay.addEventListener('click', closeMobileMenu);
-
-    // Close mobile menu when clicking on links - UPDATED
-    document.querySelectorAll('.mobile-nav-link').forEach(link => {
-      link.addEventListener('click', closeMobileMenu);
-    });
-
-    // Close mobile menu on window resize - ADDED
-    window.addEventListener('resize', () => {
-      if (window.innerWidth > 768) {
-        closeMobileMenu();
-      }
-    });
-
-    // Update mobile auth links function - ADDED
-    function updateMobileNavLinks(user) {
-      const mobileAuthLinks = document.getElementById('mobile-auth-links');
-      mobileAuthLinks.innerHTML = '';
-
-      if (user) {
-        const signOutLink = document.createElement('a');
-        signOutLink.href = '#';
-        signOutLink.className = 'mobile-nav-link';
-        signOutLink.innerHTML = '<i class="fas fa-sign-out-alt mr-3"></i>Sign Out';
-        signOutLink.addEventListener('click', async (e) => {
-          e.preventDefault();
-          try {
-            await signOut(auth);
-            showMessage('Signed out successfully', 'green');
-          } catch (error) {
-            showMessage('Error signing out: ' + error.message, 'red');
-          }
-        });
-        mobileAuthLinks.appendChild(signOutLink);
-      } else {
-        const signInLink = document.createElement('a');
-        signInLink.href = 'signin.html';
-        signInLink.className = 'mobile-nav-link';
-        signInLink.innerHTML = '<i class="fas fa-sign-in-alt mr-3"></i>Sign In';
-        mobileAuthLinks.appendChild(signInLink);
-
-        const signUpLink = document.createElement('a');
-        signUpLink.href = 'signup.html';
-        signUpLink.className = 'mobile-nav-link';
-        signUpLink.innerHTML = '<i class="fas fa-user-plus mr-3"></i>Sign Up';
-        mobileAuthLinks.appendChild(signUpLink);
-      }
-    }
-
-    document.getElementById('get-started-btn').addEventListener('click', (e) => {
-      e.preventDefault();
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          window.location.href = 'home.html';
-        } else {
-          window.location.href = 'signin.html';
-        }
-      });
-    });
-
-    function updateNavLinks(user) {
-      const authLinks = document.getElementById('auth-links');
-      authLinks.innerHTML = '';
-
-      if (user) {
-        const signOutLink = document.createElement('a');
-        signOutLink.href = '#';
-        signOutLink.className = 'nav-link text-gray-300 hover:text-white transition-colors';
-        signOutLink.textContent = 'Sign Out';
-        signOutLink.addEventListener('click', async (e) => {
-          e.preventDefault();
-          try {
-            await signOut(auth);
-            showMessage('Signed out successfully', 'green');
-          } catch (error) {
-            showMessage('Error signing out: ' + error.message, 'red');
-          }
-        });
-        authLinks.appendChild(signOutLink);
-      } else {
-        const signInLink = document.createElement('a');
-        signInLink.href = 'signin.html';
-        signInLink.className = 'nav-link text-gray-300 hover:text-white transition-colors';
-        signInLink.textContent = 'Sign In';
-        authLinks.appendChild(signInLink);
-
-        const signUpLink = document.createElement('a');
-        signUpLink.href = 'signup.html';
-        signUpLink.className = 'nav-link text-gray-300 hover:text-white transition-colors';
-        signUpLink.textContent = 'Sign Up';
-        authLinks.appendChild(signUpLink);
-      }
-    }
-
-    function showMessage(text, color) {
-      const message = document.createElement('div');
-      message.textContent = text;
-      message.style.color = 'white';
-      message.style.backgroundColor = color;
-      message.style.padding = '10px 20px';
-      message.style.position = 'fixed';
-      message.style.top = '20px';
-      message.style.left = '50%';
-      message.style.transform = 'translateX(-50%)';
-      message.style.zIndex = '10000';
-      message.style.borderRadius = '8px';
-      document.body.appendChild(message);
-      setTimeout(() => message.remove(), 2000);
-    }
-
-    // Auth state change handler - UPDATED
-    onAuthStateChanged(auth, (user) => {
-      updateNavLinks(user);
-      updateMobileNavLinks(user); // ADDED
-    });
-
-    // Desktop navigation event listeners
-    document.getElementById('createBtn').addEventListener('click', (e) => {
-      e.preventDefault();
-      const user = auth.currentUser;
-      if (user) {
-        window.location.href = 'home.html';
-      } else {
-        showMessage('Please Sign In First', 'red');
-        setTimeout(() => window.location.href = 'signin.html', 2000);
-      }
-    });
-
-    document.getElementById('explorebtn').addEventListener('click', (e) => {
-      e.preventDefault();
-      const user = auth.currentUser;
-      if (user) {
-        window.location.href = 'explore.html';
-      } else {
-        showMessage('To Explore Universe Sign In First', 'red');
-        setTimeout(() => window.location.href = 'signin.html', 2000);
-      }
-    });
-
-    // Mobile navigation event listeners - ADDED
-    document.getElementById('mobile-createBtn').addEventListener('click', (e) => {
-      e.preventDefault();
-      const user = auth.currentUser;
-      if (user) {
-        window.location.href = 'home.html';
-      } else {
-        showMessage('Please Sign In First', 'red');
-        setTimeout(() => window.location.href = 'signin.html', 2000);
-      }
-    });
-
-    document.getElementById('mobile-explorebtn').addEventListener('click', (e) => {
-      e.preventDefault();
-      const user = auth.currentUser;
-      if (user) {
-        window.location.href = 'explore.html';
-      } else {
-        showMessage('To Explore Universe Sign In First', 'red');
-        setTimeout(() => window.location.href = 'signin.html', 2000);
-      }
-    });
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.getElementById('three-canvas').appendChild(renderer.domElement);
-
-    const particleGroups = [];
-    const colors = [0x8b45c1, 0x667eea, 0x764ba2, 0xf093fb, 0xf5576c];
-
-    for (let g = 0; g < 3; g++) {
-      const particleCount = 500;
-      const particlesGeometry = new THREE.BufferGeometry();
-      const posArray = new Float32Array(particleCount * 3);
-      const velocityArray = new Float32Array(particleCount * 3);
-
-      for (let i = 0; i < particleCount * 3; i++) {
-        posArray[i] = (Math.random() - 0.5) * 1000;
-        velocityArray[i] = (Math.random() - 0.5) * 0.02;
-      }
-
-      particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-      particlesGeometry.setAttribute('velocity', new THREE.BufferAttribute(velocityArray, 3));
-
-      const material = new THREE.PointsMaterial({
-        size: Math.random() * 3 + 1,
-        color: colors[g % colors.length],
-        transparent: true,
-        opacity: 0.8,
-        blending: THREE.AdditiveBlending
-      });
-
-      const particleMesh = new THREE.Points(particlesGeometry, material);
-      scene.add(particleMesh);
-      particleGroups.push({ mesh: particleMesh, velocities: velocityArray });
-    }
-
-    camera.position.z = 200;
-
-    const mouse = new THREE.Vector2();
-    let mouseInfluence = 0;
-
-    window.addEventListener('mousemove', (event) => {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      mouseInfluence = Math.min(mouseInfluence + 0.01, 0.1);
-    });
-
-    function animate() {
-      requestAnimationFrame(animate);
-
-      particleGroups.forEach((group, index) => {
-        const positions = group.mesh.geometry.attributes.position.array;
-        const velocities = group.velocities;
-
-        for (let i = 0; i < positions.length; i += 3) {
-          positions[i] += velocities[i] + mouse.x * mouseInfluence;
-          positions[i + 1] += velocities[i + 1] + mouse.y * mouseInfluence;
-          positions[i + 2] += velocities[i + 2];
-
-          if (positions[i] > 500) positions[i] = -500;
-          if (positions[i] < -500) positions[i] = 500;
-          if (positions[i + 1] > 500) positions[i + 1] = -500;
-          if (positions[i + 1] < -500) positions[i + 1] = 500;
-          if (positions[i + 2] > 500) positions[i + 2] = -500;
-          if (positions[i + 2] < -500) positions[i + 2] = 500;
-        }
-
-        group.mesh.geometry.attributes.position.needsUpdate = true;
-        group.mesh.rotation.y += 0.001 * (index + 1);
-        group.mesh.rotation.x += 0.0005 * (index + 1);
-      });
-
-      mouseInfluence = Math.max(mouseInfluence - 0.005, 0);
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    const particleContainer = document.getElementById('particle-container');
-    let particleId = 0;
-
-    function createParticleTrail(x, y) {
-      const particle = document.createElement('div');
-      particle.className = 'particle-trail';
-      particle.style.left = x + 'px';
-      particle.style.top = y + 'px';
-      particle.style.opacity = '1';
-      particleContainer.appendChild(particle);
-
-      gsap.to(particle, {
-        opacity: 0,
-        scale: 0,
-        x: Math.random() * 100 - 50,
-        y: Math.random() * 100 - 50,
-        duration: 2,
-        ease: "power2.out",
-        onComplete: () => {
-          particle.remove();
-        }
-      });
-    }
-
-    document.addEventListener('mousemove', (e) => {
-      if (Math.random() < 0.1) {
-        createParticleTrail(e.clientX, e.clientY);
-      }
-    });
-
-    const magneticElements = document.querySelectorAll('.magnetic-hover');
-    magneticElements.forEach(element => {
-      element.addEventListener('mouseenter', (e) => {
-        gsap.to(element, { scale: 1.1, duration: 0.3, ease: "power2.out" });
-      });
-      element.addEventListener('mouseleave', (e) => {
-        gsap.to(element, {
-          scale: 1,
-          x: 0,
-          y: 0,
-          duration: 0.3,
-          ease: "power2.out"
-        });
-      });
-
-      element.addEventListener('mousemove', (e) => {
-        const rect = element.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        gsap.to(element, { x: x * 0.1, y: y * 0.1, duration: 0.3, ease: "power2.out" });
-      });
-    });
-
-    const tl = gsap.timeline();
-    tl.from('.letter', {
-      opacity: 0,
-      y: 20,
-      duration: 0.3,
-      stagger: 0.1,
-      ease: "power2.out"
-    })
-      .from('.auth-section', { opacity: 0, scale: 0.8, duration: 1, ease: "back.out(1.7)" }, "-=0.5")
-      .from('nav', { opacity: 0, y: -50, duration: 1, ease: "power2.out" }, "-=1")
-      .from('.grid > div', { opacity: 0, y: 50, duration: 0.8, stagger: 0.2, ease: "power2.out" }, "-=0.5");
-
-    document.getElementById('demo-btn').addEventListener('click', (e) => {
-      const rect = e.target.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      for (let i = 0; i < 20; i++) {
-        createParticleTrail(centerX, centerY);
-      }
-      gsap.to(e.target, {
-        scale: 1.2, duration: 0.1, yoyo: true, repeat: 1, ease: "power2.inOut",
-        onComplete: () => { alert('⚡ Demo: Coming Soon..'); }
-      });
-    });
-
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
+    document.addEventListener('DOMContentLoaded', function () {
+      // 3D Particle Background
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ alpha: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
+      const threeCanvas = document.getElementById('three-canvas');
+      if (threeCanvas) {
+        threeCanvas.appendChild(renderer.domElement);
+      }
+      const particleGroups = [];
+      const colors = [0x8b45c1, 0x667eea, 0x764ba2, 0xf093fb, 0xf5576c];
+      for (let g = 0; g < 3; g++) {
+        const particleCount = 500;
+        const particlesGeometry = new THREE.BufferGeometry();
+        const posArray = new Float32Array(particleCount * 3);
+        const velocityArray = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount * 3; i++) {
+          posArray[i] = (Math.random() - 0.5) * 1000;
+          velocityArray[i] = (Math.random() - 0.5) * 0.02;
+        }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        particlesGeometry.setAttribute('velocity', new THREE.BufferAttribute(velocityArray, 3));
+        const material = new THREE.PointsMaterial({
+          size: Math.random() * 3 + 1,
+          color: colors[g % colors.length],
+          transparent: true,
+          opacity: 0.8,
+          blending: THREE.AdditiveBlending
+        });
+        const particleMesh = new THREE.Points(particlesGeometry, material);
+        scene.add(particleMesh);
+        particleGroups.push({ mesh: particleMesh, velocities: velocityArray });
+      }
+      camera.position.z = 200;
+      const mouse = new THREE.Vector2();
+      let mouseInfluence = 0;
+      window.addEventListener('mousemove', (event) => {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        mouseInfluence = Math.min(mouseInfluence + 0.01, 0.1);
+      });
+      function animate() {
+        requestAnimationFrame(animate);
+        particleGroups.forEach((group, index) => {
+          const positions = group.mesh.geometry.attributes.position.array;
+          const velocities = group.velocities;
+          for (let i = 0; i < positions.length; i += 3) {
+            positions[i] += velocities[i] + mouse.x * mouseInfluence;
+            positions[i + 1] += velocities[i + 1] + mouse.y * mouseInfluence;
+            positions[i + 2] += velocities[i + 2];
+            if (positions[i] > 500) positions[i] = -500;
+            if (positions[i] < -500) positions[i] = 500;
+            if (positions[i + 1] > 500) positions[i + 1] = -500;
+            if (positions[i + 1] < -500) positions[i + 1] = 500;
+            if (positions[i + 2] > 500) positions[i + 2] = -500;
+            if (positions[i + 2] < -500) positions[i + 2] = 500;
+          }
+          group.mesh.geometry.attributes.position.needsUpdate = true;
+          group.mesh.rotation.y += 0.001 * (index + 1);
+          group.mesh.rotation.x += 0.0005 * (index + 1);
+        });
+        mouseInfluence = Math.max(mouseInfluence - 0.005, 0);
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // Particle Trail
+      const particleContainer = document.getElementById('particle-container');
+      function createParticleTrail(x, y) {
+        const particle = document.createElement('div');
+        particle.className = 'particle-trail';
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        particle.style.opacity = '1';
+        particleContainer.appendChild(particle);
+        gsap.to(particle, {
+          opacity: 0,
+          scale: 0,
+          x: Math.random() * 100 - 50,
+          y: Math.random() * 100 - 50,
+          duration: 2,
+          ease: "power2.out",
+          onComplete: () => particle.remove()
+        });
+      }
+      document.addEventListener('mousemove', (e) => {
+        if (Math.random() < 0.1) {
+          createParticleTrail(e.clientX, e.clientY);
+        }
+      });
+
+      // GSAP Letter animation
+      const tl = gsap.timeline();
+      tl.from('.letter', {
+        opacity: 0,
+        y: 20,
+        duration: 0.3,
+        stagger: 0.1,
+        ease: "power2.out"
+      })
+        .from('.auth-section', { opacity: 0, scale: 0.8, duration: 1, ease: "back.out(1.7)" }, "-=0.5")
+        .from('.wizard-container', { opacity: 0, x: -50, duration: 1, ease: "power2.out" }, "-=0.8");
+
+      // Window resizer
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      // Show message
+      function showMessage(message, type) {
+        const messageContainer = document.getElementById('message-container');
+        if (messageContainer) {
+          messageContainer.textContent = message;
+          messageContainer.className = `message ${type}`;
+          messageContainer.style.display = 'block';
+          setTimeout(() => {
+            messageContainer.style.display = 'none';
+          }, 5000);
+        } else {
+          alert(message);
+        }
+      }
+
+      // Image upload handler
+      const imageInput = document.getElementById('image');
+      if (imageInput) {
+        imageInput.addEventListener('change', function (e) {
+          const file = e.target.files[0];
+          if (file) {
+            const validation = validateImageFile(file);
+            if (!validation.valid) {
+              showMessage(validation.error, 'error');
+              e.target.value = '';
+              return;
+            }
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const preview = document.getElementById('imagePreview');
+              if (preview) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                document.getElementById('image-preview').classList.remove('hidden');
+              }
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
     });
 
-    const tl1 = gsap.timeline();
-    tl1.from('.nav-link', {
-      opacity: 0,
-      y: -50,
-      duration: 0.8,
-      stagger: 0.2,
-      ease: "power2.out"
+    // GSAP animation for navbar entrance (place after GSAP is loaded)
+    gsap.from('nav', { 
+      opacity: 0, 
+      y: -50, 
+      duration: 1, 
+      ease: "power2.out" 
+    });
+
+
+    // ===== JAVASCRIPT ADDITIONS ===== 
+// Add this to your existing JavaScript
+
+// Mobile Navigation Functions
+function toggleMobileMenu() {
+  const mobileNav = document.getElementById('mobile-nav');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  const hamburger = document.getElementById('hamburger');
+  const body = document.body;
+  
+  const isActive = mobileNav.classList.contains('active');
+  
+  if (isActive) {
+    closeMobileMenu();
+  } else {
+    openMobileMenu();
+  }
+}
+
+function openMobileMenu() {
+  const mobileNav = document.getElementById('mobile-nav');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  const hamburger = document.getElementById('hamburger');
+  const body = document.body;
+  
+  mobileNav.classList.add('active');
+  overlay.classList.add('active');
+  hamburger.classList.add('active');
+  body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+  
+  // Add slide-in animation for menu items
+  const menuItems = mobileNav.querySelectorAll('a, button:not(.mobile-close)');
+  menuItems.forEach((item, index) => {
+    item.style.transform = 'translateX(100px)';
+    item.style.opacity = '0';
+    
+    setTimeout(() => {
+      item.style.transition = 'all 0.3s ease';
+      item.style.transform = 'translateX(0)';
+      item.style.opacity = '1';
+    }, index * 100 + 200);
+  });
+}
+
+function closeMobileMenu() {
+  const mobileNav = document.getElementById('mobile-nav');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  const hamburger = document.getElementById('hamburger');
+  const body = document.body;
+  
+  mobileNav.classList.remove('active');
+  overlay.classList.remove('active');
+  hamburger.classList.remove('active');
+  body.style.overflow = ''; // Restore scrolling
+  
+  // Reset menu item styles
+  const menuItems = mobileNav.querySelectorAll('a, button:not(.mobile-close)');
+  menuItems.forEach(item => {
+    item.style.transition = '';
+    item.style.transform = '';
+    item.style.opacity = '';
+  });
+}
+
+// REPLACE YOUR EXISTING DOMContentLoaded EVENT LISTENER WITH THIS:
+document.addEventListener('DOMContentLoaded', function () {
+  // Mobile navigation event listeners
+  const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+  const mobileClose = document.getElementById('mobile-close');
+  const mobileOverlay = document.getElementById('mobile-nav-overlay');
+  
+  if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+  }
+  
+  if (mobileClose) {
+    mobileClose.addEventListener('click', closeMobileMenu);
+  }
+  
+  if (mobileOverlay) {
+    mobileOverlay.addEventListener('click', closeMobileMenu);
+  }
+  
+  // Close mobile menu when clicking on a link
+  const mobileLinks = document.querySelectorAll('#mobile-nav a');
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', closeMobileMenu);
+  });
+  
+  // Close mobile menu on escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeMobileMenu();
+    }
+  });
+  
+  // Close mobile menu on window resize
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 768) {
+      closeMobileMenu();
+    }
+  });
+
+  // [Keep all your existing DOMContentLoaded code here...]
+  // 3D Particle Background code...
+  // Image upload handler...
+  // etc...
+});
+
+    // Wizard functionality
+    let currentStep = 1;
+    const totalSteps = 5;
+    let selectedUniverse = '';
+    let characterData = {};
+
+    function updateProgress() {
+      const progressFill = document.getElementById('progress-fill');
+      const percentage = (currentStep / totalSteps) * 100;
+      progressFill.style.width = percentage + '%';
+      for (let i = 1; i <= totalSteps; i++) {
+        const step = document.getElementById(`step-${i}`);
+        step.classList.remove('active', 'completed');
+        if (i < currentStep) {
+          step.classList.add('completed');
+        } else if (i === currentStep) {
+          step.classList.add('active');
+        }
+      }
+      document.querySelectorAll('.step-label').forEach((label, index) => {
+        label.classList.toggle('active', index + 1 === currentStep);
+      });
+      document.getElementById('step-counter').textContent = `Step ${currentStep} of ${totalSteps}`;
+    }
+
+    function showStep(stepNumber) {
+      document.querySelectorAll('.wizard-step').forEach(step => {
+        step.classList.remove('active');
+      });
+      document.getElementById(`wizard-step-${stepNumber}`).classList.add('active');
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const createBtn = document.getElementById('submit-btn');
+      prevBtn.disabled = stepNumber === 1;
+      if (stepNumber === totalSteps) {
+        nextBtn.classList.add('hidden');
+        createBtn.classList.remove('hidden');
+      } else {
+        nextBtn.classList.remove('hidden');
+        createBtn.classList.add('hidden');
+      }
+      updateProgress();
+    }
+
+    function nextStep() {
+      if (validateCurrentStep() && currentStep < totalSteps) {
+        currentStep++;
+        showStep(currentStep);
+      }
+    }
+
+    function previousStep() {
+      if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    }
+
+    function validateCurrentStep() {
+  switch (currentStep) {
+    case 1:
+      const name = document.getElementById('name').value.trim();
+      const title = document.getElementById('title').value.trim();
+      if (!name || !title) {
+        showMessage('Please fill in all required fields', 'error');
+        return false;
+      }
+      break;
+    case 2:
+      if (!selectedUniverse) {
+        showMessage('Please select a universe', 'error');
+        return false;
+      }
+      if (selectedUniverse === 'Custom' && !document.getElementById('customUniverse').value.trim()) {
+        showMessage('Please enter a custom universe name', 'error');
+        return false;
+      }
+      break;
+    case 3:
+      const backstory = document.getElementById('backstory').value.trim();
+      const motivation = document.getElementById('motivation').value.trim();
+      if (!backstory || !motivation) {
+        showMessage('Please fill in all required fields', 'error');
+        return false;
+      }
+      break;
+    case 4:
+      const powers = document.getElementById('powers').value.trim();
+      const weaknesses = document.getElementById('weaknesses').value.trim();
+      const fights = document.getElementById('fights').value.trim();
+      if (!powers || !weaknesses || !fights) {
+        showMessage('Please fill in all required fields', 'error');
+        return false;
+      }
+      break;
+    case 5:
+      const imageFile = document.getElementById('image').files[0];
+      if (!imageFile) {
+        showMessage('Please upload an image', 'error');
+        return false;
+      }
+      const validation = validateImageFile(imageFile);
+      if (!validation.valid) {
+        showMessage(validation.error, 'error');
+        document.getElementById('image').value = '';
+        return false;
+      }
+      break;
+  }
+  return true;
+}
+
+
+
+    function selectUniverse(universe) {
+      document.querySelectorAll('.universe-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      event.currentTarget.classList.add('selected');
+      selectedUniverse = universe;
+      document.getElementById('universe').value = universe;
+      const customUniverseGroup = document.getElementById('custom-universe-group');
+      customUniverseGroup.classList.toggle('hidden', universe !== 'Custom');
+    }
+
+    function removeImage() {
+      document.getElementById('image').value = '';
+      document.getElementById('image-preview').classList.add('hidden');
+      document.getElementById('imagePreview').style.display = 'none';
+    }
+
+    function createCharacter() {
+      if (validateCurrentStep()) {
+        document.getElementById('character-form').dispatchEvent(new Event('submit'));
+      }
+    }
+
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.universe-card').forEach(card => {
+        card.addEventListener('click', function () {
+          selectUniverse(this.dataset.universe);
+        });
+      });
+
+      const imageInput = document.getElementById('image');
+      if (imageInput) {
+        imageInput.addEventListener('change', function (e) {
+          const file = e.target.files[0];
+          if (file) {
+            const validation = validateImageFile(file);
+            if (!validation.valid) {
+              showMessage(validation.error, 'error');
+              e.target.value = '';
+              return;
+            }
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const preview = document.getElementById('imagePreview');
+              if (preview) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                document.getElementById('image-preview').classList.remove('hidden');
+              }
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      // Mobile menu toggle
+      const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+      const navLinks = document.querySelector('.nav-links');
+      if (mobileMenuToggle && navLinks) {
+        mobileMenuToggle.addEventListener('click', () => {
+          navLinks.classList.toggle('active');
+        });
+      }
     });
   </script>
 </body>
