@@ -619,6 +619,9 @@
     <div id="auth-links-mobile" class="flex flex-col space-y-0">
       <!-- Mobile auth links will be dynamically added here -->
     </div>
+    <a href="#" id="signout-mobile" class="mobile-nav-link" style="display: none;">
+      <i class="fas fa-sign-out-alt mr-3"></i>Sign Out
+    </a>
     <a href="aboutus.html" class="mobile-nav-link">
       <i class="fas fa-info-circle mr-3"></i>About
     </a>
@@ -741,6 +744,18 @@
     // Close mobile menu when clicking on links
     document.querySelectorAll('.mobile-nav-link').forEach(link => {
       link.addEventListener('click', closeMobileMenu);
+    });
+
+    // Sign out functionality for mobile
+    document.getElementById('signout-mobile').addEventListener('click', function(e) {
+      e.preventDefault();
+      // Add your sign out logic here
+      // For example, if using Firebase:
+      // firebase.auth().signOut().then(() => {
+      //   window.location.href = 'index.html';
+      // });
+      console.log('Sign out clicked');
+      closeMobileMenu();
     });
 
     // Close mobile menu on window resize
