@@ -585,81 +585,80 @@
 
     /* Navigation Bar */
     nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(17, 24, 39, 0.9);
-      backdrop-filter: blur(10px);
-      z-index: 50;
-      padding: 1rem 0;
-    }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(17, 24, 39, 0.9);
+  backdrop-filter: blur(10px);
+  z-index: 50;
+  padding: 1rem 0;
+}
 
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    .nav-logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #3b82f6;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #3b82f6;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
 
-    .nav-logo:hover {
-      color: #ffffff;
-    }
+.nav-logo:hover {
+  color: #ffffff;
+}
 
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-    }
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
 
-    .nav-links a,
-    .nav-links button {
-      color: #d1d5db;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 1rem;
-      transition: color 0.3s ease;
-      background: none;
-      border: none;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      padding-bottom: 4px;
-      /* Add some space for the line */
-    }
+.nav-links a,
+.nav-links button {
+  color: #d1d5db;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 4px; /* Add some space for the line */
+}
 
-    /* Individual hover line effect */
-    .nav-links a::before,
-    .nav-links button::before {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: -100%;
-      width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, #8b45c1, #667eea);
-      transition: left 0.3s ease;
-    }
+/* Individual hover line effect */
+.nav-links a::before,
+.nav-links button::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #8b45c1, #667eea);
+  transition: left 0.3s ease;
+}
 
-    .nav-links a:hover::before,
-    .nav-links button:hover::before {
-      left: 0;
-    }
+.nav-links a:hover::before,
+.nav-links button:hover::before {
+  left: 0;
+}
 
-    .nav-links a:hover,
-    .nav-links button:hover {
-      color: #ffffff;
-    }
+.nav-links a:hover,
+.nav-links button:hover {
+  color: #ffffff;
+}
 
     /* Mobile Menu */
     .mobile-menu-toggle {
@@ -1080,23 +1079,23 @@
       <h1 class="holographic">⚔ ChronoVerse </h1>
       <p>Create epic characters and generate their legendary stories</p>
     </header>
-
+    
 
     <nav>
-      <div class="nav-container">
-        <a href="index.html" class="nav-logo">ChronoVerse </a>
-        <div class="nav-links">
-          <a href="index.html">Home</a>
-          <a href="#" id="createBtn">Create</a>
-          <a href="explore.html">Explore</a>
-          <button onclick="signOut()">Sign Out</button>
-          <a href="aboutus.html">About</a>
-        </div>
-        <div class="mobile-menu-toggle">
-          <i class="fas fa-bars"></i>
-        </div>
-      </div>
-    </nav>
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">ChronoVerse </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="#" id="createBtn">Create</a>
+      <a href="explore.html">Explore</a>
+      <button onclick="signOut()">Sign Out</button>
+      <a href="aboutus.html">About</a>
+    </div>
+    <div class="mobile-menu-toggle">
+      <i class="fas fa-bars"></i>
+    </div>
+  </div>
+</nav>
 
     <div class="auth-section glass-morph">
       <div id="user-section">
@@ -1264,16 +1263,14 @@
             <div class="step-icon">🎨</div>
             <h2 class="step-title">Character Portrait</h2>
             <p class="step-description">Bring your character to life with an image</p>
-            <!-- Replace the image-upload-wizard div with this -->
-
             <div class="image-upload-wizard">
-              <label for="image" class="upload-area" id="upload-area">
+              <div class="upload-area" id="upload-area">
                 <div class="upload-icon">📸</div>
                 <h3>Drop your image here</h3>
                 <p>or click to browse</p>
-              </label>
-              <input type="file" id="image" name="image"
-                accept="image/*,.jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.tiff,.ico" required />
+                <input type="file" id="image" name="image"
+                  accept="image/*,.jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.tiff,.ico" required />
+              </div>
               <div class="image-preview-wizard hidden" id="image-preview">
                 <img id="imagePreview" alt="Character preview" />
                 <input type="hidden" id="imageURL" name="imageURL" />
@@ -1281,7 +1278,6 @@
               </div>
             </div>
           </div>
-            
         </div>
 
         <div class="wizard-navigation">
@@ -1301,7 +1297,7 @@
       </form>
     </div>
 
-
+   
   </div>
   </div>
   </div>
@@ -1338,7 +1334,7 @@
         'image/webp', 'image/svg+xml', 'image/bmp',
         'image/tiff', 'image/x-icon', 'image/vnd.microsoft.icon'
       ];
-      const maxSize = 5 * 1024 * 1024;
+      const maxSize = 5 * 1024 * 1024; 
       if (!allowedTypes.includes(file.type)) {
         return { valid: false, error: 'Unsupported image format. Please use JPG, PNG, GIF, WebP, SVG, BMP, TIFF, or ICO.' };
       }
@@ -1502,11 +1498,11 @@
     });
 
     // GSAP animation for navbar entrance (place after GSAP is loaded)
-    gsap.from('nav', {
-      opacity: 0,
-      y: -50,
-      duration: 1,
-      ease: "power2.out"
+    gsap.from('nav', { 
+      opacity: 0, 
+      y: -50, 
+      duration: 1, 
+      ease: "power2.out" 
     });
 
 
@@ -1569,58 +1565,58 @@
     }
 
     function validateCurrentStep() {
-      switch (currentStep) {
-        case 1:
-          const name = document.getElementById('name').value.trim();
-          const title = document.getElementById('title').value.trim();
-          if (!name || !title) {
-            showMessage('Please fill in all required fields', 'error');
-            return false;
-          }
-          break;
-        case 2:
-          if (!selectedUniverse) {
-            showMessage('Please select a universe', 'error');
-            return false;
-          }
-          if (selectedUniverse === 'Custom' && !document.getElementById('customUniverse').value.trim()) {
-            showMessage('Please enter a custom universe name', 'error');
-            return false;
-          }
-          break;
-        case 3:
-          const backstory = document.getElementById('backstory').value.trim();
-          const motivation = document.getElementById('motivation').value.trim();
-          if (!backstory || !motivation) {
-            showMessage('Please fill in all required fields', 'error');
-            return false;
-          }
-          break;
-        case 4:
-          const powers = document.getElementById('powers').value.trim();
-          const weaknesses = document.getElementById('weaknesses').value.trim();
-          const fights = document.getElementById('fights').value.trim();
-          if (!powers || !weaknesses || !fights) {
-            showMessage('Please fill in all required fields', 'error');
-            return false;
-          }
-          break;
-        case 5:
-          const imageFile = document.getElementById('image').files[0];
-          if (!imageFile) {
-            showMessage('Please upload an image', 'error');
-            return false;
-          }
-          const validation = validateImageFile(imageFile);
-          if (!validation.valid) {
-            showMessage(validation.error, 'error');
-            document.getElementById('image').value = '';
-            return false;
-          }
-          break;
+  switch (currentStep) {
+    case 1:
+      const name = document.getElementById('name').value.trim();
+      const title = document.getElementById('title').value.trim();
+      if (!name || !title) {
+        showMessage('Please fill in all required fields', 'error');
+        return false;
       }
-      return true;
-    }
+      break;
+    case 2:
+      if (!selectedUniverse) {
+        showMessage('Please select a universe', 'error');
+        return false;
+      }
+      if (selectedUniverse === 'Custom' && !document.getElementById('customUniverse').value.trim()) {
+        showMessage('Please enter a custom universe name', 'error');
+        return false;
+      }
+      break;
+    case 3:
+      const backstory = document.getElementById('backstory').value.trim();
+      const motivation = document.getElementById('motivation').value.trim();
+      if (!backstory || !motivation) {
+        showMessage('Please fill in all required fields', 'error');
+        return false;
+      }
+      break;
+    case 4:
+      const powers = document.getElementById('powers').value.trim();
+      const weaknesses = document.getElementById('weaknesses').value.trim();
+      const fights = document.getElementById('fights').value.trim();
+      if (!powers || !weaknesses || !fights) {
+        showMessage('Please fill in all required fields', 'error');
+        return false;
+      }
+      break;
+    case 5:
+      const imageFile = document.getElementById('image').files[0];
+      if (!imageFile) {
+        showMessage('Please upload an image', 'error');
+        return false;
+      }
+      const validation = validateImageFile(imageFile);
+      if (!validation.valid) {
+        showMessage(validation.error, 'error');
+        document.getElementById('image').value = '';
+        return false;
+      }
+      break;
+  }
+  return true;
+}
 
 
 
