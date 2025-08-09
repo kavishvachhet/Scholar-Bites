@@ -317,10 +317,38 @@
         padding: 14px;
       }
     }
+
+    /* Loading overlay for authentication check */
+    .auth-loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #111827;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    .auth-loading .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #667eea;
+      border-top: 4px solid transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
   </style>
 </head>
 
 <body>
+  <!-- Auth Loading Screen -->
+  <div class="auth-loading" id="auth-loading">
+    <div class="spinner"></div>
+  </div>
+
   <!-- 3D Canvas -->
   <div id="three-canvas" class="fixed top-0 left-0 w-full h-full z-0"></div>
 
@@ -376,7 +404,7 @@
   </nav>
 
   <!-- Sign In Modal -->
-  <div class="modal">
+  <div class="modal" id="signin-modal" style="display: none;">
     <div class="modal-content">
       <h1 class="text-center text-2xl md:text-3xl font-bold mb-1 holographic">ChronoVerse </h1>
       <p class="text-center text-gray-400 mb-6 text-sm">Where legendary characters are born.</p>
@@ -416,6 +444,43 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+
+    // Elements
+    const authLoading = document.getElementById('auth-loading');
+    const signinModal = document.getElementById('signin-modal');
+
+    // Check authentication state immediately
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, redirect to home page
+        window.location.replace('home.html'); // Use replace instead of href to prevent back navigation
+      } else {
+        // User is not signed in, show the signin form
+        authLoading.style.display = 'none';
+        signinModal.style.display = 'flex';
+        
+        // Initialize animations after showing the modal
+        initializeAnimations();
+      }
+    });
+
+    // Prevent back navigation after successful login
+    window.addEventListener('popstate', (event) => {
+      if (auth.currentUser) {
+        // If user is authenticated and tries to go back, redirect to home
+        window.location.replace('home.html');
+      }
+    });
+
+    function initializeAnimations() {
+      // GSAP Animation for navigation bar only
+      gsap.from('nav', { 
+        opacity: 0, 
+        y: -50, 
+        duration: 1, 
+        ease: "power2.out" 
+      });
+    }
 
     // Mobile Menu Toggle
     const hamburger = document.getElementById('hamburger');
@@ -556,7 +621,9 @@
         message.className = "success";
         message.textContent = "Login successful!";
         message.style.display = "block";
-        setTimeout(() => window.location.href = "home.html", 1500);
+        
+        // Use replace to prevent back navigation to signin page
+        setTimeout(() => window.location.replace("home.html"), 1500);
       } catch (error) {
         btn.disabled = false;
         btnText.textContent = "SIGN IN";
@@ -576,14 +643,6 @@
       input.type = input.type === "password" ? "text" : "password";
       this.classList.toggle("fa-eye");
       this.classList.toggle("fa-eye-slash");
-    });
-
-    // GSAP Animation for navigation bar only
-    gsap.from('nav', { 
-      opacity: 0, 
-      y: -50, 
-      duration: 1, 
-      ease: "power2.out" 
     });
 
     // Close mobile menu on window resize
