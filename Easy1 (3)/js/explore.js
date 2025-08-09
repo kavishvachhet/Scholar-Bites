@@ -187,6 +187,13 @@ async function loadCharacters() {
             });
         });
 
+        allCharacters.sort((a, b) => {
+            const timeA = a.createdAt ? (a.createdAt.toDate ? a.createdAt.toDate() : new Date(a.createdAt)) : new Date(0);
+            const timeB = b.createdAt ? (b.createdAt.toDate ? b.createdAt.toDate() : new Date(b.createdAt)) : new Date(0);
+            
+            return timeB - timeA;
+        });
+
         console.log("Loaded characters:", allCharacters);
         displayCharacters(allCharacters);
         updateStats();
