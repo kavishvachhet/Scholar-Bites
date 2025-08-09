@@ -1040,22 +1040,6 @@
       display: none !important;
     }
 
-    /* Add to style */
-    #image {
-      display: none;
-    }
-
-    /* Remove this from style */
-    .upload-area input[type="file"] {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      cursor: pointer;
-    }
-
     @media (max-width: 768px) {
       .wizard-container {
         padding: 1rem;
@@ -1297,7 +1281,7 @@
               </div>
             </div>
           </div>
-
+            
         </div>
 
         <div class="wizard-navigation">
@@ -1366,31 +1350,6 @@
 
     document.addEventListener('DOMContentLoaded', function () {
       // 3D Particle Background
-
-      // Add this to the script, inside DOMContentLoaded
-
-      const uploadArea = document.getElementById('upload-area');
-      if (uploadArea) {
-        uploadArea.addEventListener('dragover', (e) => {
-          e.preventDefault();
-          uploadArea.style.borderColor = '#8b45c1';
-        });
-
-        uploadArea.addEventListener('dragleave', () => {
-          uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-          e.preventDefault();
-          uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-          const file = e.dataTransfer.files[0];
-          if (file) {
-            document.getElementById('image').files = e.dataTransfer.files;
-            const event = new Event('change');
-            document.getElementById('image').dispatchEvent(event);
-          }
-        });
-      }
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
       const renderer = new THREE.WebGLRenderer({ alpha: true });
