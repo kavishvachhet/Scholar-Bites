@@ -420,24 +420,36 @@
       border-left-color: #667eea;
     }
 
+    /* FIXED HAMBURGER STYLES */
     .hamburger {
       display: none;
       flex-direction: column;
       cursor: pointer;
-      padding: 5px;
+      padding: 10px;
+      position: relative;
+      z-index: 9999; /* Higher z-index to ensure visibility */
+      background: rgba(0, 0, 0, 0.1); /* Subtle background for better visibility */
+      border-radius: 4px;
+      transition: background 0.3s ease;
+    }
+
+    .hamburger:hover {
+      background: rgba(255, 255, 255, 0.1);
     }
 
     .hamburger span {
-      width: 25px;
+      width: 28px; /* Increased width for better visibility */
       height: 3px;
-      background: #d1d5db;
-      margin: 3px 0;
+      background: #ffffff; /* Changed to white for better contrast */
+      margin: 4px 0; /* Increased margin for better spacing */
       transition: 0.3s ease;
       border-radius: 2px;
+      display: block; /* Ensure spans are visible */
     }
 
     .hamburger.active span:nth-child(1) {
-      transform: rotate(45deg) translate(6px, 6px);
+      transform: rotate(45deg) translate(7px, 7px);
+      background: #ffffff;
     }
 
     .hamburger.active span:nth-child(2) {
@@ -445,7 +457,14 @@
     }
 
     .hamburger.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(6px, -6px);
+      transform: rotate(-45deg) translate(7px, -7px);
+      background: #ffffff;
+    }
+
+    /* Navigation Container Fix */
+    .nav-container {
+      position: relative;
+      z-index: 100;
     }
 
     /* Desktop Navigation */
@@ -453,14 +472,51 @@
       display: flex;
     }
 
+    /* CRITICAL: Mobile Media Query Fix */
     @media (max-width: 768px) {
       .nav-links {
-        display: none;
+        display: none !important; /* Force hide on mobile */
       }
 
       .hamburger {
-        display: flex;
+        display: flex !important; /* Force show on mobile */
+        align-items: center;
+        justify-content: center;
       }
+
+      /* Ensure nav container has proper layout on mobile */
+      .nav-container {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+      }
+
+      /* Additional mobile-specific styling */
+      .nav-logo {
+        font-size: 1.5rem; /* Slightly smaller on mobile */
+      }
+    }
+
+    /* Extra small devices */
+    @media (max-width: 480px) {
+      .hamburger {
+        padding: 8px;
+      }
+      
+      .hamburger span {
+        width: 25px;
+        height: 2.5px;
+        margin: 3px 0;
+      }
+      
+      .nav-container {
+        padding: 1rem !important;
+      }
+    }
+
+    /* Ensure Three.js canvas doesn't interfere */
+    #three-canvas {
+      pointer-events: none;
     }
   </style>
 </head>
