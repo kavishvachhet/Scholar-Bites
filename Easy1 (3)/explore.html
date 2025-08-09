@@ -242,6 +242,11 @@
       min-width: 200px;
     }
 
+    .search-filter select option {
+      color: white;
+      background: #111827;
+    }
+
     .search-filter input::placeholder {
       color: rgba(255, 255, 255, 0.6);
     }
@@ -632,14 +637,15 @@
     <div class="flex justify-between items-center px-4 md:px-6 lg:px-10 py-4">
       <!-- Left Side: Logo -->
       <a href="index.html" class="text-xl md:text-2xl font-bold text-cyan-300 hover:text-white transition-colors">
-        ChronoVerse 
+        ChronoVerse
       </a>
 
       <!-- Desktop Menu -->
       <div class="desktop-nav space-x-4 md:space-x-6 text-sm md:text-base font-medium">
         <a href="index.html" class="nav-link text-gray-300 hover:text-white transition-colors">Home</a>
         <a href="home.html" id="createBtn" class="nav-link text-gray-300 hover:text-white transition-colors">Create</a>
-        <a href="explore.html" id="explorebtn" class="nav-link text-gray-300 hover:text-white transition-colors">Explore</a>
+        <a href="explore.html" id="explorebtn"
+          class="nav-link text-gray-300 hover:text-white transition-colors">Explore</a>
         <!-- Dynamic Auth Links -->
         <div id="auth-links" class="flex space-x-4 md:space-x-6">
           <!-- Links will be dynamically added here based on auth state -->
@@ -706,10 +712,10 @@
       </div>
       <div class="story-actions">
         <button class="btn btn-primary" onclick="regenerateStory()">Regenerate Story</button>
-        <button class="btn btn-secondary" onclick="delstory()" 
-        style="background-color: #dc3545; color: white; border-color: #dc3545; position: relative; overflow: hidden; transition: all 0.3s ease;"
-        onmouseover="this.style.boxShadow = '0 8px 20px rgba(220, 53, 69, 0.4)'; this.style.transform = 'translateY(-2px)';"
-        onmouseout="this.style.boxShadow = 'none'; this.style.transform = 'translateY(0)';">
+        <button class="btn btn-secondary" onclick="delstory()"
+          style="background-color: #dc3545; color: white; border-color: #dc3545; position: relative; overflow: hidden; transition: all 0.3s ease;"
+          onmouseover="this.style.boxShadow = '0 8px 20px rgba(220, 53, 69, 0.4)'; this.style.transform = 'translateY(-2px)';"
+          onmouseout="this.style.boxShadow = 'none'; this.style.transform = 'translateY(0)';">
           Delete Story
         </button>
         <button class="btn btn-secondary" onclick="hideStory()">Close</button>
@@ -754,14 +760,14 @@
       const authLinks = document.getElementById('auth-links');
       const authLinksMobile = document.getElementById('auth-links-mobile');
       const signoutMobile = document.getElementById('signout-mobile');
-      
+
       if (user) {
         // User is signed in - show sign out links
         authLinks.innerHTML = '<a href="#" onclick="signOut()" class="nav-link text-gray-300 hover:text-white transition-colors">Sign Out</a>';
-        
+
         // Show mobile sign out
         signoutMobile.style.display = 'block';
-        
+
         // Hide sign in/up links from mobile auth container
         authLinksMobile.innerHTML = '';
       } else {
@@ -770,10 +776,10 @@
           <a href="signin.html" class="nav-link text-gray-300 hover:text-white transition-colors">Sign In</a>
           <a href="signup.html" class="nav-link text-gray-300 hover:text-white transition-colors">Sign Up</a>
         `;
-        
+
         // Hide mobile sign out
         signoutMobile.style.display = 'none';
-        
+
         // Show sign in/up links in mobile
         authLinksMobile.innerHTML = `
           <a href="signin.html" class="mobile-nav-link">
@@ -816,7 +822,7 @@
     });
 
     // Sign out functionality for mobile
-    document.getElementById('signout-mobile').addEventListener('click', function(e) {
+    document.getElementById('signout-mobile').addEventListener('click', function (e) {
       e.preventDefault();
       window.signOut();
       closeMobileMenu();
@@ -835,7 +841,7 @@
       messageContainer.textContent = message;
       messageContainer.className = `message ${type}`;
       messageContainer.style.display = 'block';
-      
+
       setTimeout(() => {
         messageContainer.style.display = 'none';
       }, 3000);
@@ -843,9 +849,7 @@
   </script>
 
   <!-- Three.js Background Animation Script -->
-  <script>
 
-  <!-- Three.js Background Animation Script -->
   <script>
     // Three.js particle background code
     const scene = new THREE.Scene();
@@ -914,12 +918,11 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // GSAP animation for the navigation bar
-    gsap.from('nav', { 
-      opacity: 0, 
-      y: -50, 
-      duration: 1, 
-      ease: "power2.out" 
+    gsap.from('nav', {
+      opacity: 0,
+      y: -50,
+      duration: 1,
+      ease: "power2.out"
     });
   </script>
 </body>
