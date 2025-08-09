@@ -717,8 +717,75 @@
     </div>
   </div>
 
-  <!-- Three.js Background Animation and Mobile Menu Script -->
-  <script>
+  <!-- Firebase and Authentication Script -->
+  <script type="module">
+    import { GoogleGenAI } from 'https://esm.run/@google/genai';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, collection, addDoc, updateDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYI3WQ9-peR0HEPxhrxCrsAEg2wn9QoDY",
+      authDomain: "character-generator-75fdf.firebaseapp.com",
+      projectId: "character-generator-75fdf",
+      storageBucket: "character-generator-75fdf.appspot.com",
+      messagingSenderId: "233443409399",
+      appId: "1:233443409399:web:d6757f2a53db4388bc82f2",
+      measurementId: "G-F8TEK5KSNV"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Global sign out function
+    window.signOut = async () => {
+      try {
+        await signOut(auth);
+        window.location.href = "signin.html";
+      } catch (error) {
+        console.error("Error signing out:", error);
+        showMessage("Failed to sign out.", "error");
+      }
+    };
+
+    // Auth state management
+    onAuthStateChanged(auth, (user) => {
+      const authLinks = document.getElementById('auth-links');
+      const authLinksMobile = document.getElementById('auth-links-mobile');
+      const signoutMobile = document.getElementById('signout-mobile');
+      
+      if (user) {
+        // User is signed in - show sign out links
+        authLinks.innerHTML = '<a href="#" onclick="signOut()" class="nav-link text-gray-300 hover:text-white transition-colors">Sign Out</a>';
+        
+        // Show mobile sign out
+        signoutMobile.style.display = 'block';
+        
+        // Hide sign in/up links from mobile auth container
+        authLinksMobile.innerHTML = '';
+      } else {
+        // User is signed out - show sign in/up links
+        authLinks.innerHTML = `
+          <a href="signin.html" class="nav-link text-gray-300 hover:text-white transition-colors">Sign In</a>
+          <a href="signup.html" class="nav-link text-gray-300 hover:text-white transition-colors">Sign Up</a>
+        `;
+        
+        // Hide mobile sign out
+        signoutMobile.style.display = 'none';
+        
+        // Show sign in/up links in mobile
+        authLinksMobile.innerHTML = `
+          <a href="signin.html" class="mobile-nav-link">
+            <i class="fas fa-sign-in-alt mr-3"></i>Sign In
+          </a>
+          <a href="signup.html" class="mobile-nav-link">
+            <i class="fas fa-user-plus mr-3"></i>Sign Up
+          </a>
+        `;
+      }
+    });
+
     // Mobile Menu Toggle Functionality
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -742,19 +809,16 @@
     mobileOverlay.addEventListener('click', closeMobileMenu);
 
     // Close mobile menu when clicking on links
-    document.querySelectorAll('.mobile-nav-link').forEach(link => {
-      link.addEventListener('click', closeMobileMenu);
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('mobile-nav-link')) {
+        closeMobileMenu();
+      }
     });
 
     // Sign out functionality for mobile
     document.getElementById('signout-mobile').addEventListener('click', function(e) {
       e.preventDefault();
-      // Add your sign out logic here
-      // For example, if using Firebase:
-      // firebase.auth().signOut().then(() => {
-      //   window.location.href = 'index.html';
-      // });
-      console.log('Sign out clicked');
+      window.signOut();
       closeMobileMenu();
     });
 
@@ -765,6 +829,24 @@
       }
     });
 
+    // Message display function
+    window.showMessage = (message, type) => {
+      const messageContainer = document.getElementById('message-container');
+      messageContainer.textContent = message;
+      messageContainer.className = `message ${type}`;
+      messageContainer.style.display = 'block';
+      
+      setTimeout(() => {
+        messageContainer.style.display = 'none';
+      }, 3000);
+    };
+  </script>
+
+  <!-- Three.js Background Animation Script -->
+  <script>
+
+  <!-- Three.js Background Animation Script -->
+  <script>
     // Three.js particle background code
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
