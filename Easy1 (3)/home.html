@@ -957,9 +957,6 @@
       /* Add these for better mobile support */
       -webkit-tap-highlight-color: transparent;
       user-select: none;
-      padding: 2rem 1rem;
-      min-height: 120px;
-      touch-action: manipulation;
     }
 
     .upload-area:hover {
@@ -978,7 +975,6 @@
       /* Add these for mobile compatibility */
       z-index: 2;
       -webkit-appearance: none;
-      min-height: 120px;
     }
 
     .upload-icon {
@@ -1355,63 +1351,6 @@
       return { valid: true };
     }
 
-    // Enhanced image upload handler for mobile compatibility
-const imageInput = document.getElementById('image');
-const uploadArea = document.getElementById('upload-area');
-
-if (imageInput && uploadArea) {
-  // Handle file input change
-  imageInput.addEventListener('change', function (e) {
-    const file = e.target.files[0];
-    if (file) {
-      const validation = validateImageFile(file);
-      if (!validation.valid) {
-        showMessage(validation.error, 'error');
-        e.target.value = '';
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const preview = document.getElementById('imagePreview');
-        if (preview) {
-          preview.src = e.target.result;
-          preview.style.display = 'block';
-          document.getElementById('image-preview').classList.remove('hidden');
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-
-  // Simplified click handler for better mobile support
-  uploadArea.addEventListener('click', function (e) {
-    // Only trigger if clicking the upload area itself, not the file input
-    if (e.target === uploadArea || uploadArea.contains(e.target)) {
-      if (e.target !== imageInput) {
-        e.preventDefault();
-        e.stopPropagation();
-        imageInput.focus();
-        imageInput.click();
-      }
-    }
-  });
-}
-
-    // Show message
-      function showMessage(message, type) {
-        const messageContainer = document.getElementById('message-container');
-        if (messageContainer) {
-          messageContainer.textContent = message;
-          messageContainer.className = `message ${type}`;
-          messageContainer.style.display = 'block';
-          setTimeout(() => {
-            messageContainer.style.display = 'none';
-          }, 5000);
-        } else {
-          alert(message);
-        }
-      }
-
     document.addEventListener('DOMContentLoaded', function () {
       // 3D Particle Background
       const scene = new THREE.Scene();
@@ -1523,15 +1462,24 @@ if (imageInput && uploadArea) {
         renderer.setSize(window.innerWidth, window.innerHeight);
       });
 
-      
+      // Show message
+      function showMessage(message, type) {
+        const messageContainer = document.getElementById('message-container');
+        if (messageContainer) {
+          messageContainer.textContent = message;
+          messageContainer.className = `message ${type}`;
+          messageContainer.style.display = 'block';
+          setTimeout(() => {
+            messageContainer.style.display = 'none';
+          }, 5000);
+        } else {
+          alert(message);
+        }
+      }
 
       // Image upload handler
-      // Enhanced image upload handler for mobile compatibility
       const imageInput = document.getElementById('image');
-      const uploadArea = document.getElementById('upload-area');
-
-      if (imageInput && uploadArea) {
-        // Handle file input change
+      if (imageInput) {
         imageInput.addEventListener('change', function (e) {
           const file = e.target.files[0];
           if (file) {
@@ -1552,24 +1500,6 @@ if (imageInput && uploadArea) {
             };
             reader.readAsDataURL(file);
           }
-        });
-
-        // Add click handler for upload area (mobile support)
-        uploadArea.addEventListener('click', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          imageInput.click();
-        });
-
-        // Add touch handlers for mobile devices
-        uploadArea.addEventListener('touchstart', function (e) {
-          e.preventDefault();
-        });
-
-        uploadArea.addEventListener('touchend', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          imageInput.click();
         });
       }
     });
@@ -1728,7 +1658,30 @@ if (imageInput && uploadArea) {
         });
       });
 
-      
+      const imageInput = document.getElementById('image');
+      if (imageInput) {
+        imageInput.addEventListener('change', function (e) {
+          const file = e.target.files[0];
+          if (file) {
+            const validation = validateImageFile(file);
+            if (!validation.valid) {
+              showMessage(validation.error, 'error');
+              e.target.value = '';
+              return;
+            }
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const preview = document.getElementById('imagePreview');
+              if (preview) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                document.getElementById('image-preview').classList.remove('hidden');
+              }
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
 
       // Mobile menu toggle
       const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
