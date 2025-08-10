@@ -470,7 +470,7 @@ function filterCharacters() {
 
         const matchesUniverse = universeFilter === '' ||
             characterUniverse === universeFilter ||
-            (universeFilter === 'custom' && !['marvel', 'dc', 'star wars', 'lord of the rings', 'harry potter', 'game of thrones', 'anime'].includes(characterUniverse));
+            (universeFilter === 'custom' && !['marvel', 'dc', 'star wars', 'fantasy','anime'].includes(characterUniverse));
 
         if (matchesSearch && matchesUniverse) {
             card.style.display = 'block';
