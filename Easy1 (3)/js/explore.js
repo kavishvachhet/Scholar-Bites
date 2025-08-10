@@ -215,6 +215,7 @@ function displayCharacters(characters) {
 
     if (characters.length === 0) {
         charactersGrid.innerHTML = '<div class="loading centered-message">No characters found. Create your first character!</div>';
+        charactersGrid.classList.add('empty-state');
         return;
     }
 
