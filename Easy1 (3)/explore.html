@@ -159,12 +159,21 @@
     }
 
     /* styles.css */
+    #characters-grid.empty-state {
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
+      min-height: 300px;
+    }
+
     .centered-message {
+      display: block;
       text-align: center;
       width: 100%;
-      padding: 20px;
-      font-size: 1.2rem;
-      color: #666;
+      padding: 40px 20px;
+      font-size: 1.3rem;
+      color: rgba(255, 255, 255, 0.7);
+      max-width: 500px;
     }
 
     #three-canvas {
@@ -792,7 +801,7 @@
       }
     });
 
-    // Mobile Menu Toggle Functionality
+    // Mobile Menu Toggle Functionality 
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobile-menu');
     const mobileOverlay = document.getElementById('mobile-overlay');
