@@ -7,7 +7,6 @@
   <title>About Us - ChronoVerse </title>
   <!-- Fonts and Libraries -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
@@ -367,157 +366,6 @@
       border: 1px solid rgba(139, 69, 193, 0.3);
       color: white;
     }
-
-    /* Mobile Navigation Styles */
-    .mobile-menu {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 280px;
-      height: 100vh;
-      background: rgba(17, 24, 39, 0.95);
-      backdrop-filter: blur(20px);
-      transition: right 0.3s ease;
-      z-index: 1000;
-      padding-top: 80px;
-    }
-
-    .mobile-menu.active {
-      right: 0;
-    }
-
-    .mobile-menu-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      z-index: 999;
-    }
-
-    .mobile-menu-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .mobile-nav-link {
-      display: block;
-      padding: 15px 25px;
-      color: #d1d5db;
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      border-left: 3px solid transparent;
-    }
-
-    .mobile-nav-link:hover {
-      color: #ffffff;
-      background: rgba(102, 126, 234, 0.1);
-      border-left-color: #667eea;
-    }
-
-    /* FIXED HAMBURGER STYLES */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-      padding: 10px;
-      position: relative;
-      z-index: 9999; /* Higher z-index to ensure visibility */
-      background: rgba(0, 0, 0, 0.1); /* Subtle background for better visibility */
-      border-radius: 4px;
-      transition: background 0.3s ease;
-    }
-
-    .hamburger:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .hamburger span {
-      width: 28px; /* Increased width for better visibility */
-      height: 3px;
-      background: #ffffff; /* Changed to white for better contrast */
-      margin: 4px 0; /* Increased margin for better spacing */
-      transition: 0.3s ease;
-      border-radius: 2px;
-      display: block; /* Ensure spans are visible */
-    }
-
-    .hamburger.active span:nth-child(1) {
-      transform: rotate(45deg) translate(7px, 7px);
-      background: #ffffff;
-    }
-
-    .hamburger.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(7px, -7px);
-      background: #ffffff;
-    }
-
-    /* Navigation Container Fix */
-    .nav-container {
-      position: relative;
-      z-index: 100;
-    }
-
-    /* Desktop Navigation */
-    .nav-links {
-      display: flex;
-    }
-
-    /* CRITICAL: Mobile Media Query Fix */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none !important; /* Force hide on mobile */
-      }
-
-      .hamburger {
-        display: flex !important; /* Force show on mobile */
-        align-items: center;
-        justify-content: center;
-      }
-
-      /* Ensure nav container has proper layout on mobile */
-      .nav-container {
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-      }
-
-      /* Additional mobile-specific styling */
-      .nav-logo {
-        font-size: 1.5rem; /* Slightly smaller on mobile */
-      }
-    }
-
-    /* Extra small devices */
-    @media (max-width: 480px) {
-      .hamburger {
-        padding: 8px;
-      }
-      
-      .hamburger span {
-        width: 25px;
-        height: 2.5px;
-        margin: 3px 0;
-      }
-      
-      .nav-container {
-        padding: 1rem !important;
-      }
-    }
-
-    /* Ensure Three.js canvas doesn't interfere */
-    #three-canvas {
-      pointer-events: none;
-    }
   </style>
 </head>
 
@@ -527,31 +375,6 @@
 
   <!-- Particle Trail Container -->
   <div id="particle-container" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></div>
-
-  <!-- Mobile Menu Overlay -->
-  <div class="mobile-menu-overlay" id="mobile-overlay"></div>
-
-  <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobile-menu">
-    <a href="index.html" class="mobile-nav-link">
-      <i class="fas fa-home mr-3"></i>Home
-    </a>
-    <a href="home.html" id="createBtnMobile" class="mobile-nav-link">
-      <i class="fas fa-plus mr-3"></i>Create
-    </a>
-    <a href="explore.html" id="explorebtnMobile" class="mobile-nav-link">
-      <i class="fas fa-compass mr-3"></i>Explore
-    </a>
-    <div id="auth-links-mobile" class="flex flex-col space-y-0">
-      <!-- Mobile auth links will be dynamically added here -->
-    </div>
-    <a href="#" id="signout-mobile" class="mobile-nav-link" style="display: none;">
-      <i class="fas fa-sign-out-alt mr-3"></i>Sign Out
-    </a>
-    <a href="aboutus.html" class="mobile-nav-link">
-      <i class="fas fa-info-circle mr-3"></i>About
-    </a>
-  </div>
 
   <!-- Navigation Bar with slide-in animation -->
   <nav id="main-nav" class="fixed top-0 left-0 w-full bg-gray-900 bg-opacity-80 backdrop-blur-lg z-50 nav-slide-in">
@@ -567,10 +390,8 @@
         <div id="auth-links" class="flex space-x-6"></div>
         <a href="aboutus.html" class="nav-link text-gray-300 hover:text-white transition-colors pr-2 md:pr-2">About</a>
       </div>
-      <div class="hamburger" id="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
+      <div class="mobile-menu-toggle md:hidden">
+        <i class="fas fa-bars text-gray-300 text-xl"></i>
       </div>
     </div>
   </nav>
@@ -589,35 +410,42 @@
       <!-- Person 1 -->
       <div
         class="glass-morph border-glass p-8 rounded-2xl flex flex-col items-center shadow-xl magnetic-hover transition-transform duration-300">
-        <img src="https://api.dicebear.com/8.x/adventurer/svg?seed=Alexander"
+        <img src="images/image.png"
           class="w-32 h-32 rounded-full border-4 border-gradient-to-r from-purple-500 to-pink-500 mb-4 floating"
           alt="Loki - Avatar" />
-        <h2 class="text-2xl font-semibold mb-1">Loki</h2>
-        <p class="text-purple-300 font-medium mb-3">Chief Storysmith & Multiversal Mischief Maker</p>
-        <p class="text-gray-300 text-base mb-3">
-          Loki brings creativity, technical prowess, and a flair for twists to ChronoVerse . From building the back-end
-          engines to dreaming up the wildest alternate timelines, their vision shapes every page.
-        </p>
+        <h2 class="text-2xl font-semibold mb-1">Kavish Vachheta</h2>
+        <p class="text-gray-400 text-sm mb-3">
+  I'm a BTech Computer Science student at Ahmedabad University with a passion for coding and data structures.
+</p>
+<p class="text-gray-400 text-sm mb-3">
+  I enjoy working with algorithms and finding efficient solutions to complex problems. My focus areas include data structures implementation and optimization, which form the core of my programming approach.
+</p>
+<p class="text-gray-400 text-sm">
+  Currently pursuing my degree while building practical coding skills through academic projects and personal development. Always eager to learn new technologies and take on challenging programming problems.
+</p>
+       
         <ul class="text-gray-400 text-sm mt-2 mb-2">
-          <li>• Lead JavaScript & AI Dev</li>
-          <li>• Sci-fi & Fantasy Worldbuilder</li>
+         
         </ul>
       </div>
-      <!-- Person 2 -->
       <div
         class="glass-morph border-glass p-8 rounded-2xl flex flex-col items-center shadow-xl magnetic-hover transition-transform duration-300">
-        <img src="https://api.dicebear.com/8.x/adventurer/svg?seed=TheWatcher"
+        <img src="images/IMG_20240915_020510_299[1].jpg"
           class="w-32 h-32 rounded-full border-4 border-gradient-to-r from-yellow-400 to-red-500 mb-4 floating"
           alt="The Watcher - Avatar" />
-        <h2 class="text-2xl font-semibold mb-1">The Watcher</h2>
-        <p class="text-yellow-300 font-medium mb-3">Universe Explorer & Lore Archivist</p>
-        <p class="text-gray-300 text-base mb-3">
-          The Watcher ensures every hero, villain, and world is meticulously chronicled, balancing design, lore
-          fidelity, and user experience. They connect stories across the multiverse for all explorers.
-        </p>
-        <ul class="text-gray-400 text-sm mt-2 mb-2">
-          <li>• UX Designer & Animator</li>
-          <li>• Lore Mastermind</li>
+        <h2 class="text-2xl font-semibold mb-1">Vatsal Parsaniya</h2>
+
+       <div class="text-gray-400 text-sm mb-3 text-left">
+  <p class="mb-2">I am deeply fascinated by the transformative power of Artificial Intelligence and Machine Learning:</p>
+  <ul class="space-y-1 ml-4">
+    <li>• Exploring neural networks and NLP applications</li>
+    <li>• Building intelligent systems and automation solutions</li>
+    <li>• Extracting meaningful insights from complex data</li>
+    <li>• Solving real-world problems with cutting-edge AI technologies</li>
+  </ul>
+</div>
+        
+        
         </ul>
       </div>
     </div>
@@ -632,11 +460,7 @@
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="w-full text-center text-sm text-gray-500 py-6 holographic">
-    © 2025 ChronoVerse  • Made by Loki & The Watcher
-  </footer>
-
+ 
   <script type="module">
     // Navigation slide-in animation on page load
     window.addEventListener('load', () => {
@@ -677,21 +501,8 @@
       });
     }
 
-    // Global sign out function
-    window.signOut = async () => {
-      try {
-        await signOut(auth);
-        window.location.href = "signin.html";
-      } catch (error) {
-        console.error("Error signing out:", error);
-        showMessage("Failed to sign out.", "red");
-      }
-    };
-
     function updateNavLinks(user) {
       const authLinks = document.getElementById('auth-links');
-      const authLinksMobile = document.getElementById('auth-links-mobile');
-      const signoutMobile = document.getElementById('signout-mobile');
       authLinks.innerHTML = '';
 
       if (user) {
@@ -709,9 +520,6 @@
           }
         });
         authLinks.appendChild(signOutLink);
-
-        signoutMobile.style.display = 'block';
-        authLinksMobile.innerHTML = '';
       } else {
         const signInLink = document.createElement('a');
         signInLink.href = 'signin.html';
@@ -724,16 +532,6 @@
         signUpLink.className = 'nav-link text-gray-300 hover:text-white transition-colors';
         signUpLink.textContent = 'Sign Up';
         authLinks.appendChild(signUpLink);
-
-        signoutMobile.style.display = 'none';
-        authLinksMobile.innerHTML = `
-          <a href="signin.html" class="mobile-nav-link">
-            <i class="fas fa-sign-in-alt mr-3"></i>Sign In
-          </a>
-          <a href="signup.html" class="mobile-nav-link">
-            <i class="fas fa-user-plus mr-3"></i>Sign Up
-          </a>
-        `;
       }
     }
 
@@ -775,72 +573,6 @@
       } else {
         showMessage('To Explore Universe Sign In First', 'red');
         setTimeout(() => window.location.href = 'signin.html', 2000);
-      }
-    });
-
-    document.getElementById('createBtnMobile').addEventListener('click', (e) => {
-      e.preventDefault();
-      const user = auth.currentUser;
-      if (user) {
-        window.location.href = 'home.html';
-      } else {
-        showMessage('Please Sign In First', 'red');
-        setTimeout(() => window.location.href = 'signin.html', 2000);
-      }
-      closeMobileMenu();
-    });
-    document.getElementById('explorebtnMobile').addEventListener('click', (e) => {
-      e.preventDefault();
-      const user = auth.currentUser;
-      if (user) {
-        window.location.href = 'explore.html';
-      } else {
-        showMessage('To Explore Universe Sign In First', 'red');
-        setTimeout(() => window.location.href = 'signin.html', 2000);
-      }
-      closeMobileMenu();
-    });
-
-    // Mobile Menu Toggle Functionality
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileOverlay = document.getElementById('mobile-overlay');
-
-    function toggleMobileMenu() {
-      hamburger.classList.toggle('active');
-      mobileMenu.classList.toggle('active');
-      mobileOverlay.classList.toggle('active');
-      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
-    }
-
-    function closeMobileMenu() {
-      hamburger.classList.remove('active');
-      mobileMenu.classList.remove('active');
-      mobileOverlay.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    hamburger.addEventListener('click', toggleMobileMenu);
-    mobileOverlay.addEventListener('click', closeMobileMenu);
-
-    // Close mobile menu when clicking on links
-    document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('mobile-nav-link')) {
-        closeMobileMenu();
-      }
-    });
-
-    // Sign out functionality for mobile
-    document.getElementById('signout-mobile').addEventListener('click', function (e) {
-      e.preventDefault();
-      window.signOut();
-      closeMobileMenu();
-    });
-
-    // Close mobile menu on window resize
-    window.addEventListener('resize', () => {
-      if (window.innerWidth > 768) {
-        closeMobileMenu();
       }
     });
 
