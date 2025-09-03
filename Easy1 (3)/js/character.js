@@ -155,7 +155,7 @@ const ai = new GoogleGenAI({
 });
 
 async function generateStoryLocal(name, universe, backstory, powers, weaknesses, fights) {
-  const prompt = `Create an epic fantasy or sci-fi story about a character:
+  const prompt = `Create an epic fantasy or sci-fi story about a character, (make sure the story is interesting and the language is in simple leman terms):
 - Name: ${name}
 - Universe: ${universe}
 - Backstory: ${backstory}
