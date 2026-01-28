@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChronoVerse Visual Base</title>
+
+  <!-- Fonts and Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Tailwind CSS + Three.js + GSAP -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+  <script type="module" src="js/explore.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: #111827;
+      color: white;
+      height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Navigation Bar */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(30, 30, 30, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 50;
+    }
+
+    .nav-link {
+      position: relative;
+      overflow: hidden;
+      opacity: 1;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -100%;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #8b45c1, #667eea);
+      transition: left 0.3s ease;
+    }
+
+    .nav-link:hover::before {
+      left: 0;
+    }
+
+    /* Mobile Navigation Styles */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 280px;
+      height: 100vh;
+      background: rgba(17, 24, 39, 0.95);
+      backdrop-filter: blur(20px);
+      transition: right 0.3s ease;
+      z-index: 1000;
+      padding-top: 80px;
+    }
+
+    .mobile-menu.active {
+      right: 0;
+    }
+
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+
+    .mobile-menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-nav-link {
+      display: block;
+      padding: 15px 25px;
+      color: #d1d5db;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .mobile-nav-link:hover {
+      color: #ffffff;
+      background: rgba(102, 126, 234, 0.1);
+      border-left-color: #667eea;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background: #d1d5db;
+      margin: 3px 0;
+      transition: 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* Desktop Navigation */
+    .desktop-nav {
+      display: flex;
+    }
+
+    @media (max-width: 768px) {
+      .desktop-nav {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    /* styles.css */
+    #characters-grid.empty-state {
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
+      min-height: 300px;
+    }
+
+    .centered-message {
+      display: block;
+      text-align: center;
+      width: 100%;
+      padding: 40px 20px;
+      font-size: 1.3rem;
+      color: rgba(255, 255, 255, 0.7);
+      max-width: 500px;
+    }
+
+    #three-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .holographic {
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: holographic-shift 3s ease infinite;
+    }
+
+    @keyframes holographic-shift {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .characters-section {
+      margin-top: 100px;
+      padding: 2rem;
+      min-height: calc(100vh - 100px);
+    }
+
+    .glass-morph {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+    }
+
+    .characters-section h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 2rem;
+      background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .search-filter {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .search-filter input,
+    .search-filter select {
+      padding: 0.75rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1rem;
+      backdrop-filter: blur(10px);
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .search-filter select option {
+      color: white;
+      background: #111827;
+    }
+
+    .search-filter input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .stats {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      min-width: 150px;
+    }
+
+    .stat-number {
+      display: block;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #4ecdc4;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse-glow {
+      from {
+        text-shadow: 0 0 20px #4ecdc4;
+      }
+
+      to {
+        text-shadow: 0 0 30px #4ecdc4, 0 0 40px #4ecdc4;
+      }
+    }
+
+    #characters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .character-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 0;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .character-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(78, 205, 196, 0.3);
+      border-color: rgba(78, 205, 196, 0.5);
+    }
+
+    .character-image-container {
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      border-radius: 20px 20px 0 0;
+      position: relative;
+    }
+
+    .character-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .character-card:hover .character-image {
+      transform: scale(1.1);
+    }
+
+    .character-placeholder {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .placeholder-icon {
+      font-size: 4rem;
+      opacity: 0.7;
+    }
+
+    .character-info {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .character-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #4ecdc4;
+      text-align: center;
+    }
+
+    .character-details {
+      margin-bottom: 1.5rem;
+      flex: 1;
+    }
+
+    .detail-line {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+      min-height: 1.5rem;
+    }
+
+    .detail-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #4ecdc4;
+      min-width: 85px;
+      margin-right: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .detail-value {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .character-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    .btn {
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      flex: 1;
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 8px 20px rgba(78, 205, 196, 0.4);
+    }
+
+    .loading {
+      text-align: center;
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.7);
+      padding: 2rem;
+    }
+
+    #story-section {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .story-modal {
+      background: rgba(17, 24, 39, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 800px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .story-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .story-header h3 {
+      font-size: 1.8rem;
+      color: #4ecdc4;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    .close-btn:hover {
+      color: white;
+    }
+
+    #story-content {
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.8;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .story-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    #message-container {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      z-index: 1100;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      color: white;
+      font-weight: 500;
+      display: none;
+      max-width: 300px;
+    }
+
+    .message.success {
+      background: rgba(16, 185, 129, 0.9);
+      border: 1px solid #10b981;
+    }
+
+    .message.error {
+      background: rgba(239, 68, 68, 0.9);
+      border: 1px solid #ef4444;
+    }
+
+    .message.info {
+      background: rgba(59, 130, 246, 0.9);
+      border: 1px solid #3b82f6;
+    }
+
+    @media (max-width: 768px) {
+      #characters-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .character-card {
+        margin: 0 1rem;
+      }
+
+      .detail-line {
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .detail-label {
+        min-width: auto;
+      }
+
+      .characters-section {
+        padding: 1rem;
+        margin-top: 80px;
+      }
+
+      .search-filter {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .search-filter input,
+      .search-filter select {
+        min-width: 100%;
+      }
+
+      .stat-item {
+        min-width: 120px;
+        padding: 0.75rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .character-name {
+        font-size: 1.2rem;
+      }
+
+      .btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+      }
+
+      .story-modal {
+        padding: 1rem;
+        max-height: 90vh;
+      }
+
+      .story-header h3 {
+        font-size: 1.5rem;
+      }
+
+      .story-content {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 3D Particle Background -->
+  <div id="three-canvas" class="w-full h-full"></div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" id="mobile-overlay"></div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html" class="mobile-nav-link">
+      <i class="fas fa-home mr-3"></i>Home
+    </a>
+    <a href="home.html" id="createBtnMobile" class="mobile-nav-link">
+      <i class="fas fa-plus mr-3"></i>Create
+    </a>
+    <a href="explore.html" id="explorebtnMobile" class="mobile-nav-link">
+      <i class="fas fa-compass mr-3"></i>Explore
+    </a>
+    <div id="auth-links-mobile" class="flex flex-col space-y-0">
+      <!-- Mobile auth links will be dynamically added here -->
+    </div>
+    <a href="#" id="signout-mobile" class="mobile-nav-link" style="display: none;">
+      <i class="fas fa-sign-out-alt mr-3"></i>Sign Out
+    </a>
+    <a href="aboutus.html" class="mobile-nav-link">
+      <i class="fas fa-info-circle mr-3"></i>About
+    </a>
+  </div>
+
+  <!-- Navigation Bar -->
+  <nav class="fixed top-0 left-0 w-full bg-gray-900 bg-opacity-80 backdrop-blur-lg z-50">
+    <div class="flex justify-between items-center px-4 md:px-6 lg:px-10 py-4">
+      <!-- Left Side: Logo -->
+      <a href="index.html" class="text-xl md:text-2xl font-bold text-cyan-300 hover:text-white transition-colors">
+        ChronoVerse
+      </a>
+
+      <!-- Desktop Menu -->
+      <div class="desktop-nav space-x-4 md:space-x-6 text-sm md:text-base font-medium">
+        <a href="index.html" class="nav-link text-gray-300 hover:text-white transition-colors">Home</a>
+        <a href="home.html" id="createBtn" class="nav-link text-gray-300 hover:text-white transition-colors">Create</a>
+        <a href="explore.html" id="explorebtn"
+          class="nav-link text-gray-300 hover:text-white transition-colors">Explore</a>
+        <!-- Dynamic Auth Links -->
+        <div id="auth-links" class="flex space-x-4 md:space-x-6">
+          <!-- Links will be dynamically added here based on auth state -->
+        </div>
+        <a href="aboutus.html" class="nav-link text-gray-300 hover:text-white transition-colors">About</a>
+      </div>
+
+      <!-- Mobile Hamburger Menu -->
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Message Container -->
+  <div id="message-container"></div>
+
+  <!-- Centered Content -->
+  <div class="characters-section glass-morph">
+    <h2>Your Characters</h2>
+    <div class="search-filter">
+      <input type="text" id="search-input" onkeyup="filterCharacters()" placeholder="Search characters..." />
+      <select id="universe-filter" onchange="filterCharacters()">
+        <option value="">All Universes</option>
+        <option value="Marvel">Marvel</option>
+        <option value="DC">DC</option>
+        <option value="Star Wars">Star Wars</option>
+        <option value="Fantasy">Fantasy</option>
+        <option value="Anime">Anime</option>
+        <option value="Custom">Custom</option>
+      </select>
+    </div>
+
+    <div class="stats">
+      <div class="stat-item">
+        <span class="stat-number pulse-glow" id="total-characters">0</span>
+        <span class="stat-label">Total Characters</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number pulse-glow" id="universes-count">0</span>
+        <span class="stat-label">Universes</span>
+      </div>
+    </div>
+
+    <!-- Characters Grid -->
+    <div id="characters-grid" class="empty-state">
+      <div class="loading">Loading your characters...</div>
+    </div>
+  </div>
+
+  <!-- Story Modal -->
+  <div id="story-section" class="hidden">
+    <div class="story-modal">
+      <div class="story-header">
+        <h3 id="story-character-name">Character Story</h3>
+        <button class="close-btn" onclick="hideStory()">&times;</button>
+      </div>
+      <div id="story-content">
+        No story available
+      </div>
+      <div class="story-actions">
+        <button class="btn btn-primary" onclick="regenerateStory()">Regenerate Story</button>
+        <button class="btn btn-secondary" onclick="delstory()"
+          style="background-color: #dc3545; color: white; border-color: #dc3545; position: relative; overflow: hidden; transition: all 0.3s ease;"
+          onmouseover="this.style.boxShadow = '0 8px 20px rgba(220, 53, 69, 0.4)'; this.style.transform = 'translateY(-2px)';"
+          onmouseout="this.style.boxShadow = 'none'; this.style.transform = 'translateY(0)';">
+          Delete Story
+        </button>
+        <button class="btn btn-secondary" onclick="hideStory()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase and Authentication Script -->
+  <script type="module">
+    import { GoogleGenAI } from 'https://esm.run/@google/genai';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, collection, addDoc, updateDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYI3WQ9-peR0HEPxhrxCrsAEg2wn9QoDY",
+      authDomain: "character-generator-75fdf.firebaseapp.com",
+      projectId: "character-generator-75fdf",
+      storageBucket: "character-generator-75fdf.appspot.com",
+      messagingSenderId: "233443409399",
+      appId: "1:233443409399:web:d6757f2a53db4388bc82f2",
+      measurementId: "G-F8TEK5KSNV"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Global sign out function
+    window.signOut = async () => {
+      try {
+        await signOut(auth);
+        window.location.href = "signin.html";
+      } catch (error) {
+        console.error("Error signing out:", error);
+        showMessage("Failed to sign out.", "error");
+      }
+    };
+
+    // Auth state management
+    onAuthStateChanged(auth, (user) => {
+      const authLinks = document.getElementById('auth-links');
+      const authLinksMobile = document.getElementById('auth-links-mobile');
+      const signoutMobile = document.getElementById('signout-mobile');
+
+      if (user) {
+        // User is signed in - show sign out links
+        authLinks.innerHTML = '<a href="#" onclick="signOut()" class="nav-link text-gray-300 hover:text-white transition-colors">Sign Out</a>';
+
+        // Show mobile sign out
+        signoutMobile.style.display = 'block';
+
+        // Hide sign in/up links from mobile auth container
+        authLinksMobile.innerHTML = '';
+      } else {
+        // User is signed out - show sign in/up links
+        authLinks.innerHTML = `
+          <a href="signin.html" class="nav-link text-gray-300 hover:text-white transition-colors">Sign In</a>
+          <a href="signup.html" class="nav-link text-gray-300 hover:text-white transition-colors">Sign Up</a>
+        `;
+
+        // Hide mobile sign out
+        signoutMobile.style.display = 'none';
+
+        // Show sign in/up links in mobile
+        authLinksMobile.innerHTML = `
+          <a href="signin.html" class="mobile-nav-link">
+            <i class="fas fa-sign-in-alt mr-3"></i>Sign In
+          </a>
+          <a href="signup.html" class="mobile-nav-link">
+            <i class="fas fa-user-plus mr-3"></i>Sign Up
+          </a>
+        `;
+      }
+    });
+
+    // Mobile Menu Toggle Functionality 
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileOverlay = document.getElementById('mobile-overlay');
+
+    function toggleMobileMenu() {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+      mobileOverlay.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    }
+
+    function closeMobileMenu() {
+      hamburger.classList.remove('active');
+      mobileMenu.classList.remove('active');
+      mobileOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    hamburger.addEventListener('click', toggleMobileMenu);
+    mobileOverlay.addEventListener('click', closeMobileMenu);
+
+    // Close mobile menu when clicking on links
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('mobile-nav-link')) {
+        closeMobileMenu();
+      }
+    });
+
+    // Sign out functionality for mobile
+    document.getElementById('signout-mobile').addEventListener('click', function (e) {
+      e.preventDefault();
+      window.signOut();
+      closeMobileMenu();
+    });
+
+    // Close mobile menu on window resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        closeMobileMenu();
+      }
+    });
+
+    // Message display function
+    window.showMessage = (message, type) => {
+      const messageContainer = document.getElementById('message-container');
+      messageContainer.textContent = message;
+      messageContainer.className = `message ${type}`;
+      messageContainer.style.display = 'block';
+
+      setTimeout(() => {
+        messageContainer.style.display = 'none';
+      }, 3000);
+    };
+  </script>
+
+  <!-- Three.js Background Animation Script -->
+
+  <script>
+    // Three.js particle background code
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById('three-canvas').appendChild(renderer.domElement);
+
+    const particleGroups = [];
+    const colors = [0x8b45c1, 0x667eea, 0x764ba2, 0xf093fb, 0xf5576c];
+
+    for (let g = 0; g < 2; g++) {
+      const count = window.innerWidth < 768 ? 150 : 300; // Reduce particles on mobile
+      const geo = new THREE.BufferGeometry();
+      const posArray = new Float32Array(count * 3);
+      const velArray = new Float32Array(count * 3);
+
+      for (let i = 0; i < count * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 1000;
+        velArray[i] = (Math.random() - 0.5) * 1;
+      }
+
+      geo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      geo.setAttribute('velocity', new THREE.BufferAttribute(velArray, 3));
+
+      const mat = new THREE.PointsMaterial({
+        size: Math.random() * 2 + 1,
+        color: colors[g % colors.length],
+        transparent: true,
+        opacity: 0.7,
+        blending: THREE.AdditiveBlending
+      });
+
+      const mesh = new THREE.Points(geo, mat);
+      scene.add(mesh);
+      particleGroups.push({ mesh, velocities: velArray });
+    }
+
+    camera.position.z = 200;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      particleGroups.forEach((group) => {
+        const pos = group.mesh.geometry.attributes.position.array;
+        const vel = group.velocities;
+        for (let i = 0; i < pos.length; i += 3) {
+          pos[i] += vel[i];
+          pos[i + 1] += vel[i + 1];
+          pos[i + 2] += vel[i + 2];
+          if (pos[i] > 500) pos[i] = -500;
+          if (pos[i] < -500) pos[i] = 500;
+          if (pos[i + 1] > 500) pos[i + 1] = -500;
+          if (pos[i + 1] < -500) pos[i + 1] = 500;
+          if (pos[i + 2] > 500) pos[i + 2] = -500;
+          if (pos[i + 2] < -500) pos[i + 2] = 500;
+        }
+        group.mesh.geometry.attributes.position.needsUpdate = true;
+      });
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    gsap.from('nav', {
+      opacity: 0,
+      y: -50,
+      duration: 1,
+      ease: "power2.out"
+    });
+  </script>
+</body>
+
+</html>

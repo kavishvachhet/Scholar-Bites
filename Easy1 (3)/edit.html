@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Character - Epic Character Creation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <script src="https://unpkg.com/three@0.152.0/build/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <link rel="stylesheet" href="css/edit.css" />
+</head>
+<body>
+  <div id="three-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+  <div id="particle-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;"></div>
+  <div class="container">
+    <header class="header floating">
+      <h1 class="holographic">⚔ Edit Character</h1>
+      <p>Modify your legendary character's details</p>
+    </header>
+
+    <nav>
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo">ChronoVerse </a>
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="#" id="createBtn">Create</a>
+          <a href="explore.html">Explore</a>
+          <button onclick="signOut()">Sign Out</button>
+          <a href="aboutus.html">About</a>
+        </div>
+        <div class="mobile-menu-toggle">
+          <i class="fas fa-bars"></i>
+        </div>
+      </div>
+    </nav>
+
+    <!-- <div class="auth-section glass-morph">
+      <div id="user-section">
+        <div class="user-info">
+          <div class="user-avatar pulse-glow" id="user-avatar">U</div>
+          <div>
+            <h4 id="user-name" class="welcome-message">
+              Hello, <span id="user-firstname">Loading...</span>!
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    
+
+    <div class="wizard-container glass-morph">
+      <form id="edit-character-form">
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-line">
+              <div class="progress-fill" id="progress-fill" style="width: 20%;"></div>
+            </div>
+            <div class="step active" id="step-1"><span class="step-number">1</span></div>
+            <div class="step" id="step-2"><span class="step-number">2</span></div>
+            <div class="step" id="step-3"><span class="step-number">3</span></div>
+            <div class="step" id="step-4"><span class="step-number">4</span></div>
+            <div class="step" id="step-5"><span class="step-number">5</span></div>
+          </div>
+          <div class="step-labels">
+            <div class="step-label active">Basic Info</div>
+            <div class="step-label">Universe</div>
+            <div class="step-label">Backstory</div>
+            <div class="step-label">Powers</div>
+            <div class="step-label">Image</div>
+          </div>
+        </div>
+
+        <!-- Wizard Step 1 -->
+        <div class="wizard-step active" id="wizard-step-1">
+          <div class="step-content slide-in-left">
+            <div class="step-icon">⚔️</div>
+            <h2 class="step-title">Meet Your Heroes</h2>
+            <p class="step-description">Update the essentials of your legendary character</p>
+            <div class="wizard-form">
+              <div class="form-group">
+                <label for="name">Character Name *</label>
+                <input type="text" id="name" name="name" placeholder="Enter your character's name..." required />
+              </div>
+              <div class="form-group">
+                <label for="title">Title/Alias *</label>
+                <input type="text" id="title" name="title" placeholder="The Dark Knight, The Last Jedi, etc..." required />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wizard Step 2 -->
+        <div class="wizard-step" id="wizard-step-2">
+          <div class="step-content slide-in-right">
+            <div class="step-icon">🌌</div>
+            <h2 class="step-title">Choose Universe</h2>
+            <p class="step-description">Select the world where your character belongs</p>
+            <div class="universe-grid">
+              <div class="universe-card" data-universe="Marvel">
+                <div class="universe-icon">🦸‍♂️</div>
+                <h3>Marvel</h3>
+                <p>Heroes and villains with extraordinary powers</p>
+              </div>
+              <div class="universe-card" data-universe="DC">
+                <div class="universe-icon">🦇</div>
+                <h3>DC</h3>
+                <p>Iconic superheroes and cosmic adventures</p>
+              </div>
+              <div class="universe-card" data-universe="Star Wars">
+                <div class="universe-icon">⚔️</div>
+                <h3>Star Wars</h3>
+                <p>Jedi, Sith, and galactic conflicts</p>
+              </div>
+              <div class="universe-card" data-universe="Fantasy">
+                <div class="universe-icon">🧙‍♂️</div>
+                <h3>Fantasy</h3>
+                <p>Magic, dragons, and mythical realms</p>
+              </div>
+              <div class="universe-card" data-universe="Anime">
+                <div class="universe-icon">⚡</div>
+                <h3>Anime</h3>
+                <p>Unique powers and epic storylines</p>
+              </div>
+              <div class="universe-card" data-universe="Custom">
+                <div class="universe-icon">✨</div>
+                <h3>Custom</h3>
+                <p>Create your own unique universe</p>
+              </div>
+            </div>
+            <input type="hidden" id="universe" name="universe" value="" />
+            <div class="form-group hidden" id="custom-universe-group">
+              <label for="customUniverse">Custom Universe Name</label>
+              <input type="text" id="customUniverse" name="customUniverse" placeholder="Enter your custom universe name..." />
+            </div>
+          </div>
+        </div>
+
+        <!-- Wizard Step 3 -->
+        <div class="wizard-step" id="wizard-step-3">
+          <div class="step-content fade-in-up">
+            <div class="step-icon">📖</div>
+            <h2 class="step-title">Origin Story</h2>
+            <p class="step-description">Modify your character's beginning</p>
+            <div class="wizard-form">
+              <div class="form-group">
+                <label for="backstory">Character Backstory *</label>
+                <textarea id="backstory" name="backstory" rows="6" placeholder="Tell us about your character's origin story..." required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="motivation">What drives them? *</label>
+                <input type="text" id="motivation" name="motivation" placeholder="Justice, revenge, protecting loved ones..." required />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+
+        <!-- Wizard Step 4 -->
+        <div class="wizard-step" id="wizard-step-4">
+          <div class="step-content slide-in-left">
+            <div class="step-icon">💫</div>
+            <h2 class="step-title">Powers & Weaknesses</h2>
+            <p class="step-description">Update what makes your character extraordinary</p>
+            <div class="wizard-form">
+              <div class="form-group">
+                <label for="powers">Powers & Abilities *</label>
+                <textarea id="powers" name="powers" rows="4" placeholder="Super strength, magic spells, advanced technology..." required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="weaknesses">Weaknesses & Limitations *</label>
+                <textarea id="weaknesses" name="weaknesses" rows="3" placeholder="Kryptonite, fear of spiders, limited energy..." required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="fights">Notable Battles *</label>
+                <textarea id="fights" name="fights" rows="3" placeholder="Epic confrontations, rivalries, major conflicts..." required></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wizard Step 5 -->
+        <div class="wizard-step" id="wizard-step-5">
+          <div class="step-content slide-in-right">
+            <div class="step-icon">🎨</div>
+            <h2 class="step-title">Character Portrait</h2>
+            <p class="step-description">Update your character's image</p>
+            <div class="image-upload-wizard">
+              <div class="upload-area" id="upload-area">
+                <div class="upload-icon">📸</div>
+                <h3>Drop your image here</h3>
+                <p>or click to browse</p>
+                <input type="file" id="image" name="image" accept="image/*,.jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.tiff,.ico" />
+              </div>
+              <div class="image-preview-wizard" id="image-preview">
+                <img id="imagePreview" alt="Character preview" />
+                <input type="hidden" id="imageURL" name="imageURL" />
+                <button type="button" class="btn-remove" onclick="removeImage()">×</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="wizard-navigation">
+          <button type="button" class="btn btn-secondary" id="prev-btn" onclick="previousStep()" disabled>
+            <i class="fas fa-arrow-left"></i> Previous
+          </button>
+          <div class="wizard-info">
+            <span id="step-counter">Step 1 of 5</span>
+          </div>
+          <button type="button" class="btn btn-primary" id="next-btn" onclick="nextStep()">
+            Next <i class="fas fa-arrow-right"></i>
+          </button>
+          <button type="submit" class="btn btn-primary pulse-glow hidden" id="submit-btn">
+            <i class="fas fa-save"></i> <span id="submit-text">Save Changes</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div id="message-container" class="message" style="display: none;"></div>
+  </div>
+
+  <script src="js/edit.js" type="module"></script>
+</body>
+</html>
