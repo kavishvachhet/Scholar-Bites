@@ -13,9 +13,12 @@ class FoodCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFF1E1E24),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withOpacity(0.05), width: 1),
+          border: Border.all(
+            color: const Color(0xFF8B1C28).withOpacity(0.1),
+            width: 1,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +68,7 @@ class FoodCard extends StatelessWidget {
                   Text(
                     food.name,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: Color(0xFF4A0E13), // Dark Maroon
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -76,7 +79,7 @@ class FoodCard extends StatelessWidget {
                   Text(
                     '${food.calories} cal • ${food.weight}g',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.5),
+                      color: const Color(0xFF8B1C28).withOpacity(0.6),
                       fontSize: 12,
                     ),
                   ),
@@ -87,7 +90,7 @@ class FoodCard extends StatelessWidget {
                       Text(
                         '\$${food.price.toStringAsFixed(2)}',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: Color(0xFF4A0E13), // Dark Maroon
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -95,7 +98,7 @@ class FoodCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(6),
                         decoration: const BoxDecoration(
-                          color: Color(0xFFFE2B75),
+                          color: Color(0xFF8B1C28), // Maroon Primary
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(

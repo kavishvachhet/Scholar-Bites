@@ -11,7 +11,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0E0E10),
+      backgroundColor: const Color(0xFFFDF0F0),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -25,13 +25,13 @@ class LoginScreen extends StatelessWidget {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFE2B75).withOpacity(0.1),
+                    color: const Color(0xFF8B1C28).withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
                     Icons.lock_person_rounded,
                     size: 40,
-                    color: Color(0xFFFE2B75),
+                    color: Color(0xFF8B1C28),
                   ),
                 ),
               ),
@@ -41,7 +41,7 @@ class LoginScreen extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: Color(0xFF4A0E13),
                 ),
               ),
               const SizedBox(height: 8),
@@ -49,7 +49,7 @@ class LoginScreen extends StatelessWidget {
                 'Sign in to continue your food journey',
                 style: GoogleFonts.poppins(
                   fontSize: 16,
-                  color: Colors.white.withOpacity(0.6),
+                  color: const Color(0xFF4A0E13).withOpacity(0.6),
                 ),
               ),
               const SizedBox(height: 40),
@@ -74,7 +74,7 @@ class LoginScreen extends StatelessWidget {
                   child: Text(
                     'Forgot Password?',
                     style: GoogleFonts.poppins(
-                      color: const Color(0xFFFE2B75),
+                      color: const Color(0xFF8B1C28),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -101,7 +101,7 @@ class LoginScreen extends StatelessWidget {
                   Text(
                     "Don't have an account? ",
                     style: GoogleFonts.poppins(
-                      color: Colors.white.withOpacity(0.6),
+                      color: const Color(0xFF4A0E13).withOpacity(0.6),
                     ),
                   ),
                   GestureDetector(
@@ -116,7 +116,7 @@ class LoginScreen extends StatelessWidget {
                     child: Text(
                       'Sign Up',
                       style: GoogleFonts.poppins(
-                        color: const Color(0xFFFE2B75),
+                        color: const Color(0xFF8B1C28),
                         fontWeight: FontWeight.bold,
                       ),
                     ),

@@ -134,7 +134,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0E0E10),
+      backgroundColor: const Color(0xFFFDF0F0),
       body: AnimatedBuilder(
         animation: Listenable.merge([_mainController, _pulseController]),
         builder: (context, child) {
@@ -163,10 +163,10 @@ class _SplashScreenState extends State<SplashScreen>
                       height: 100,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Color(0xFFFE2B75),
+                        color: Color(0xFF8B1C28),
                         boxShadow: [
                           BoxShadow(
-                            color: Color(0x66FE2B75),
+                            color: Color(0x668B1C28),
                             blurRadius: 30,
                             spreadRadius: 10,
                           ),
@@ -207,7 +207,7 @@ class _SplashScreenState extends State<SplashScreen>
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: const Color(
-                              0xFFFE2B75,
+                              0xFF8B1C28,
                             ).withOpacity(0.3 * (1 - _pulseController.value)),
                             width: 2,
                           ),
@@ -233,7 +233,7 @@ class _SplashScreenState extends State<SplashScreen>
                           style: GoogleFonts.poppins(
                             fontSize: 36,
                             fontWeight: FontWeight.w800,
-                            color: Colors.white,
+                            color: Color(0xFF4A0E13),
                             letterSpacing: 1.5,
                           ),
                         ),
@@ -244,7 +244,7 @@ class _SplashScreenState extends State<SplashScreen>
                             Container(
                               width: 30,
                               height: 2,
-                              color: const Color(0xFFFE2B75),
+                              color: const Color(0xFF8B1C28),
                             ),
                             const SizedBox(width: 10),
                             Text(
@@ -252,7 +252,7 @@ class _SplashScreenState extends State<SplashScreen>
                               style: GoogleFonts.poppins(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white.withOpacity(0.9),
+                                color: Color(0xFF8B1C28).withOpacity(0.9),
                                 letterSpacing: 2.0,
                               ),
                             ),
@@ -260,7 +260,7 @@ class _SplashScreenState extends State<SplashScreen>
                             Container(
                               width: 30,
                               height: 2,
-                              color: const Color(0xFFFE2B75),
+                              color: const Color(0xFF8B1C28),
                             ),
                           ],
                         ),

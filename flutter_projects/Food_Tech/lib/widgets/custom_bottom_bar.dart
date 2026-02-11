@@ -9,11 +9,11 @@ class CustomBottomBar extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       height: 70,
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E24).withOpacity(0.9), // Glassmorphism base
+        color: Colors.white.withOpacity(0.9), // Glassmorphism base
         borderRadius: BorderRadius.circular(35),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: const Color(0xFF8B1C28).withOpacity(0.15),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -36,15 +36,15 @@ class CustomBottomBar extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: isActive
           ? BoxDecoration(
-              color: const Color(0xFFFE2B75).withOpacity(0.15),
+              color: const Color(0xFF8B1C28).withOpacity(0.15),
               shape: BoxShape.circle,
             )
           : null,
       child: Icon(
         icon,
         color: isActive
-            ? const Color(0xFFFE2B75)
-            : Colors.white.withOpacity(0.5),
+            ? const Color(0xFF8B1C28)
+            : const Color(0xFF4A0E13).withOpacity(0.5),
         size: 24,
       ),
     );

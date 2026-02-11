@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(
                             'Good Morning',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Color(0xFF4A0E13), // Dark Maroon
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                             ),
@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(
                             'Kavish Vachhet',
                             style: TextStyle(
-                              color: Color(0xFFFE2B75),
+                              color: Color(0xFF8B1C28), // Maroon Primary
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                             ),
@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Color(0xFF8B1C28).withOpacity(0.2),
                             width: 1,
                           ),
                           image: const DecorationImage(

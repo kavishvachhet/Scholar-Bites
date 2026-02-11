@@ -9,7 +9,7 @@ class DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0E0E10),
+      backgroundColor: const Color(0xFFFDF0F0),
       body: Stack(
         children: [
           // Background Image / Hero
@@ -34,7 +34,7 @@ class DetailScreen extends StatelessWidget {
                 angle: 0.5,
                 child: Icon(
                   Icons.eco,
-                  color: Colors.green.withOpacity(0.4),
+                  color: const Color(0xFF8B1C28).withOpacity(0.4),
                   size: 100,
                 ),
               ),
@@ -49,7 +49,7 @@ class DetailScreen extends StatelessWidget {
                 angle: -0.5,
                 child: Icon(
                   Icons.eco,
-                  color: Colors.green.withOpacity(0.3),
+                  color: const Color(0xFF8B1C28).withOpacity(0.3),
                   size: 150,
                 ),
               ),
@@ -65,10 +65,16 @@ class DetailScreen extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.white,
                   shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 8,
+                    ),
+                  ],
                 ),
-                child: const Icon(Icons.arrow_back, color: Colors.white),
+                child: const Icon(Icons.arrow_back, color: Color(0xFF4A0E13)),
               ),
             ),
           ),
@@ -83,13 +89,13 @@ class DetailScreen extends StatelessWidget {
               padding: const EdgeInsets.all(32),
               decoration: BoxDecoration(
                 // deep charcoal background or slightly lighter for contrast
-                color: const Color(0xFF0E0E10),
+                color: const Color(0xFFFDF0F0),
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(40),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
+                    color: const Color(0xFF8B1C28).withOpacity(0.1),
                     blurRadius: 30,
                     offset: const Offset(0, -10),
                   ),
@@ -102,7 +108,7 @@ class DetailScreen extends StatelessWidget {
                   Text(
                     food.name,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: Color(0xFF4A0E13),
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                       height: 1.1,
@@ -132,7 +138,7 @@ class DetailScreen extends StatelessWidget {
                   Text(
                     'Description',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Color(0xFF4A0E13),
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
@@ -141,7 +147,7 @@ class DetailScreen extends StatelessWidget {
                   Text(
                     food.description,
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.6),
+                      color: const Color(0xFF4A0E13).withOpacity(0.7),
                       fontSize: 14,
                       height: 1.6,
                     ),
@@ -159,14 +165,14 @@ class DetailScreen extends StatelessWidget {
                           Text(
                             'Price',
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.6),
+                              color: const Color(0xFF4A0E13).withOpacity(0.7),
                               fontSize: 14,
                             ),
                           ),
                           Text(
                             '\$${food.price.toStringAsFixed(2)}',
                             style: const TextStyle(
-                              color: Color(0xFFFE2B75),
+                              color: Color(0xFF8B1C28),
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
                             ),
@@ -180,11 +186,11 @@ class DetailScreen extends StatelessWidget {
                         child: Container(
                           height: 56,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFE2B75),
+                            color: const Color(0xFF8B1C28),
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(0xFFFE2B75).withOpacity(0.4),
+                                color: const Color(0xFF8B1C28).withOpacity(0.4),
                                 blurRadius: 20,
                                 offset: const Offset(0, 8),
                               ),
@@ -227,18 +233,18 @@ class DetailScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: const Color(0xFF8B1C28).withOpacity(0.05),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: const Color(0xFF8B1C28).withOpacity(0.1)),
       ),
       child: Row(
         children: [
-          Icon(icon, color: const Color(0xFFFE2B75), size: 16),
+          Icon(icon, color: const Color(0xFF8B1C28), size: 16),
           const SizedBox(width: 6),
           Text(
             label,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.8),
+              color: const Color(0xFF4A0E13).withOpacity(0.8),
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),

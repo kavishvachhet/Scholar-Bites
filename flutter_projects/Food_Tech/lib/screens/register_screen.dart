@@ -10,14 +10,14 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0E0E10),
+      backgroundColor: const Color(0xFFFDF0F0),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
-            color: Colors.white,
+            color: Color(0xFF4A0E13),
           ),
           onPressed: () => Navigator.pop(context),
         ),
@@ -34,7 +34,7 @@ class RegisterScreen extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: Color(0xFF4A0E13),
                 ),
               ),
               const SizedBox(height: 8),
@@ -42,7 +42,7 @@ class RegisterScreen extends StatelessWidget {
                 'Sign up to get started',
                 style: GoogleFonts.poppins(
                   fontSize: 16,
-                  color: Colors.white.withOpacity(0.6),
+                  color: const Color(0xFF4A0E13).withOpacity(0.6),
                 ),
               ),
               const SizedBox(height: 40),
@@ -91,7 +91,7 @@ class RegisterScreen extends StatelessWidget {
                   Text(
                     "Already have an account? ",
                     style: GoogleFonts.poppins(
-                      color: Colors.white.withOpacity(0.6),
+                      color: const Color(0xFF4A0E13).withOpacity(0.6),
                     ),
                   ),
                   GestureDetector(
@@ -101,7 +101,7 @@ class RegisterScreen extends StatelessWidget {
                     child: Text(
                       'Login',
                       style: GoogleFonts.poppins(
-                        color: const Color(0xFFFE2B75),
+                        color: const Color(0xFF8B1C28),
                         fontWeight: FontWeight.bold,
                       ),
                     ),

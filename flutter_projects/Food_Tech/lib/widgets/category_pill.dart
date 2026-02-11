@@ -20,12 +20,12 @@ class CategoryPill extends StatelessWidget {
         margin: const EdgeInsets.only(right: 16),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFFE2B75) : const Color(0xFF1E1E24),
+          color: isSelected ? const Color(0xFF8B1C28) : Colors.white,
           borderRadius: BorderRadius.circular(30),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: const Color(0xFFFE2B75).withOpacity(0.4),
+                    color: const Color(0xFF8B1C28).withOpacity(0.4),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -34,14 +34,16 @@ class CategoryPill extends StatelessWidget {
           border: Border.all(
             color: isSelected
                 ? Colors.transparent
-                : Colors.white.withOpacity(0.1),
+                : const Color(0xFF8B1C28).withOpacity(0.2),
             width: 1,
           ),
         ),
         child: Text(
           title,
           style: TextStyle(
-            color: isSelected ? Colors.white : Colors.white.withOpacity(0.6),
+            color: isSelected
+                ? Colors.white
+                : const Color(0xFF4A0E13).withOpacity(0.6),
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
             fontSize: 14,
           ),
