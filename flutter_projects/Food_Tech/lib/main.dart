@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'screens/home_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   runApp(const FoodTechApp());
@@ -31,7 +31,7 @@ class FoodTechApp extends StatelessWidget {
           background: Color(0xFF0E0E10),
         ),
       ),
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }
