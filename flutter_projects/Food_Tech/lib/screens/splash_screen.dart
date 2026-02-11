@@ -178,10 +178,13 @@ class _SplashScreenState extends State<SplashScreen>
                           child: Transform.rotate(
                             angle:
                                 _iconRotation.value * (math.pi * 2), // Radians
-                            child: const Icon(
-                              Icons.restaurant_menu_rounded,
-                              size: 50,
-                              color: Colors.white,
+                            child: ClipOval(
+                              child: Image.asset(
+                                'assets/icon/splash_image.jpeg',
+                                width: 80,
+                                height: 80,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
