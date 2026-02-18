@@ -88,7 +88,9 @@ class _HomeScreenState extends State<HomeScreen> {
           SafeArea(
             bottom: false,
             child: SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: 100),
+              padding: const EdgeInsets.only(
+                bottom: 120,
+              ), // Increased padding to avoid overlap
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

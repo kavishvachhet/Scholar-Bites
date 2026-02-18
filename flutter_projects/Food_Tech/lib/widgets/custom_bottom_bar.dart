@@ -23,13 +23,16 @@ class CustomBottomBar extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       height: 70,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9), // Glassmorphism base
+        color: Colors.white, // Solid color for non-transparent look
         borderRadius: BorderRadius.circular(35),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF8B1C28).withOpacity(0.15),
-            blurRadius: 20,
+            color: const Color(
+              0xFF8B1C28,
+            ).withOpacity(0.25), // Slightly stronger shadow
+            blurRadius: 25,
             offset: const Offset(0, 10),
+            spreadRadius: 0,
           ),
         ],
       ),
