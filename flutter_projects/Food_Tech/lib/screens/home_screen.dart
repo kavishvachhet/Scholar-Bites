@@ -7,6 +7,8 @@ import '../data/mock_data.dart';
 import '../widgets/food_card.dart';
 import '../widgets/custom_bottom_bar.dart';
 import 'detail_screen.dart';
+
+import '../utils/animation_utils.dart'; // import animation utils
 import 'cart_screen.dart';
 import 'profile_screen.dart';
 import 'favorites_screen.dart';
@@ -22,6 +24,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentNavIndex = 0;
+  final GlobalKey _cartKey = GlobalKey();
+  final GlobalKey _favKey = GlobalKey();
 
   // Special Menu
   late final List<FoodItem> _specialMenu;
@@ -41,22 +45,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _onNavTapped(int index) {
     if (index == 0) return;
-    if (index == 1)
+    if (index == 1) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => FavoritesScreen()),
       );
-    if (index == 2)
+    }
+    if (index == 2) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const CartScreen()),
       );
-    if (index == 3)
+    }
+    if (index == 3) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const ProfileScreen()),
       );
+    }
   }
+
+  void _runAddToCartAnimation(GlobalKey widgetKey, String imageUrl) {
+    AnimationUtils.runFlyAnimation(
+      context,
+      widgetKey,
+      _cartKey,
+      imageUrl,
+      onComplete: () {
+        // Optional: Shake cart icon or update badge
+      },
+    );
+  }
+
+  // _runAddToFavAnimation removed as per new design
 
   @override
   Widget build(BuildContext context) {
@@ -166,19 +187,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 );
                               },
-                              onAddTap: () {
+                              onAddTap: (key) {
                                 Provider.of<CartProvider>(
                                   context,
                                   listen: false,
                                 ).addItem(_specialMenu[index]);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      '${_specialMenu[index].name} added to cart',
-                                    ),
-                                    duration: const Duration(seconds: 1),
-                                    backgroundColor: const Color(0xFF8B1C28),
-                                  ),
+                                _runAddToCartAnimation(
+                                  key,
+                                  _specialMenu[index].imageUrl,
                                 );
                               },
                             ),
@@ -327,6 +343,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: CustomBottomBar(
               currentIndex: _currentNavIndex,
               onTap: _onNavTapped,
+              cartKey: _cartKey,
+              favKey: _favKey,
             ),
           ),
         ],

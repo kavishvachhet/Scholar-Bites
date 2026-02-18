@@ -6,14 +6,29 @@ import '../models/cart_model.dart';
 import '../data/mock_data.dart';
 import '../widgets/food_card.dart';
 import 'detail_screen.dart';
+import 'cart_screen.dart';
 
-class FavoritesScreen extends StatelessWidget {
-  // Ideally, this list should come from a central data source or be passed in.
-  // For now, I'll duplicate the dummy data or we should move it to a Provider.
-  // To avoid duplication issues, I will accept the list of items or just redefine it.
-  // Better approach: Let's assume HomeScreen has the source of truth, but for now
-  // I will redefine the list here to keep it simple as I can't easily refactor the whole app to use a ProductsProvider yet.
+import '../utils/animation_utils.dart';
+
+class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
+
+  @override
+  State<FavoritesScreen> createState() => _FavoritesScreenState();
+}
+
+class _FavoritesScreenState extends State<FavoritesScreen> {
+  final GlobalKey _cartKey = GlobalKey();
+
+  void _runAddToCartAnimation(GlobalKey widgetKey, String imageUrl) {
+    AnimationUtils.runFlyAnimation(
+      context,
+      widgetKey,
+      _cartKey,
+      imageUrl,
+      onComplete: () {},
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +38,64 @@ class FavoritesScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: const Color(0xFF4A0E13),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.8),
+                shape: BoxShape.circle,
+              ),
+              child: Consumer<CartProvider>(
+                builder: (context, cart, child) {
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      IconButton(
+                        key: _cartKey,
+                        icon: const Icon(Icons.shopping_bag_outlined),
+                        color: const Color(0xFF8B1C28),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CartScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      if (cart.itemCount > 0)
+                        Positioned(
+                          right: 8,
+                          top: 8,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF8B1C28),
+                              shape: BoxShape.circle,
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
+                            child: Text(
+                              '${cart.itemCount}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
       body: Consumer<FavoritesProvider>(
         builder: (context, favoritesProvider, child) {
@@ -75,18 +148,12 @@ class FavoritesScreen extends StatelessWidget {
                     ),
                   );
                 },
-                onAddTap: () {
+                onAddTap: (key) {
                   Provider.of<CartProvider>(
                     context,
                     listen: false,
                   ).addItem(food);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${food.name} added to cart'),
-                      duration: const Duration(seconds: 1),
-                      backgroundColor: const Color(0xFF8B1C28),
-                    ),
-                  );
+                  _runAddToCartAnimation(key, food.imageUrl);
                 },
               );
             },

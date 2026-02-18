@@ -5,11 +5,31 @@ import '../models/food_item.dart';
 import '../models/cart_model.dart';
 import '../widgets/food_card.dart';
 import 'detail_screen.dart';
+import 'cart_screen.dart';
 
-class RestaurantDetailScreen extends StatelessWidget {
+import '../utils/animation_utils.dart'; // Add utils import
+
+class RestaurantDetailScreen extends StatefulWidget {
   final Restaurant restaurant;
 
   const RestaurantDetailScreen({super.key, required this.restaurant});
+
+  @override
+  State<RestaurantDetailScreen> createState() => _RestaurantDetailScreenState();
+}
+
+class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
+  final GlobalKey _cartKey = GlobalKey();
+
+  void _runAddToCartAnimation(GlobalKey widgetKey, String imageUrl) {
+    AnimationUtils.runFlyAnimation(
+      context,
+      widgetKey,
+      _cartKey,
+      imageUrl,
+      onComplete: () {},
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +43,67 @@ class RestaurantDetailScreen extends StatelessWidget {
             pinned: true,
             backgroundColor: const Color(0xFFFDF0F0),
             iconTheme: const IconThemeData(color: Color(0xFF4A0E13)),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Consumer<CartProvider>(
+                    builder: (context, cart, child) {
+                      return Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          IconButton(
+                            key: _cartKey,
+                            icon: const Icon(Icons.shopping_bag_outlined),
+                            color: const Color(0xFF8B1C28),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CartScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                          if (cart.itemCount > 0)
+                            Positioned(
+                              right: 8,
+                              top: 8,
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFF8B1C28),
+                                  shape: BoxShape.circle,
+                                ),
+                                constraints: const BoxConstraints(
+                                  minWidth: 16,
+                                  minHeight: 16,
+                                ),
+                                child: Text(
+                                  '${cart.itemCount}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                restaurant.name,
+                widget.restaurant.name,
                 style: const TextStyle(
                   color: Color(0xFF4A0E13),
                   fontWeight: FontWeight.bold,
@@ -39,7 +117,7 @@ class RestaurantDetailScreen extends StatelessWidget {
                 ),
               ),
               background: Image.network(
-                restaurant.imageUrl,
+                widget.restaurant.imageUrl,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
@@ -67,7 +145,7 @@ class RestaurantDetailScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        '${restaurant.rating} Rating',
+                        '${widget.restaurant.rating} Rating',
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -82,7 +160,7 @@ class RestaurantDetailScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        restaurant.deliveryTime,
+                        widget.restaurant.deliveryTime,
                         style: const TextStyle(
                           fontSize: 14,
                           color: Color(0xFF4A0E13),
@@ -96,7 +174,7 @@ class RestaurantDetailScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        '\$${restaurant.deliveryFee}',
+                        '\$${widget.restaurant.deliveryFee}',
                         style: const TextStyle(
                           fontSize: 14,
                           color: Color(0xFF4A0E13),
@@ -107,7 +185,7 @@ class RestaurantDetailScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
-                    children: restaurant.tags.map((tag) {
+                    children: widget.restaurant.tags.map((tag) {
                       return Chip(
                         label: Text(
                           tag,
@@ -149,7 +227,7 @@ class RestaurantDetailScreen extends StatelessWidget {
                 mainAxisSpacing: 16,
               ),
               delegate: SliverChildBuilderDelegate((context, index) {
-                FoodItem food = restaurant.menu[index];
+                FoodItem food = widget.restaurant.menu[index];
                 return FoodCard(
                   food: food,
                   onTap: () {
@@ -160,21 +238,15 @@ class RestaurantDetailScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  onAddTap: () {
+                  onAddTap: (key) {
                     Provider.of<CartProvider>(
                       context,
                       listen: false,
                     ).addItem(food);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('${food.name} added to cart'),
-                        duration: const Duration(seconds: 1),
-                        backgroundColor: const Color(0xFF8B1C28),
-                      ),
-                    );
+                    _runAddToCartAnimation(key, food.imageUrl);
                   },
                 );
-              }, childCount: restaurant.menu.length),
+              }, childCount: widget.restaurant.menu.length),
             ),
           ),
 

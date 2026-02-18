@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import '../models/food_item.dart';
 import 'package:provider/provider.dart';
+import '../models/food_item.dart';
 import '../models/favorites_model.dart';
+import '../widgets/favorite_button.dart';
 
 class FoodCard extends StatelessWidget {
   final FoodItem food;
   final VoidCallback onTap;
-  final VoidCallback? onAddTap;
+  final Function(GlobalKey)? onAddTap;
 
   const FoodCard({
     super.key,
@@ -17,6 +18,7 @@ class FoodCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey imageKey = GlobalKey();
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -36,6 +38,7 @@ class FoodCard extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Hero(
+                    key: imageKey,
                     tag: 'food-image-${food.id}',
                     child: ClipRRect(
                       borderRadius: const BorderRadius.vertical(
@@ -86,25 +89,16 @@ class FoodCard extends StatelessWidget {
                     child: Consumer<FavoritesProvider>(
                       builder: (context, favorites, child) {
                         bool isFavorite = favorites.isFavorite(food.id);
-                        return GestureDetector(
-                          onTap: () {
-                            favorites.toggleFavorite(food.id);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.4),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              isFavorite
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              color: isFavorite
-                                  ? const Color(0xFF8B1C28)
-                                  : Colors.white,
-                              size: 18,
-                            ),
+                        return Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.4),
+                            shape: BoxShape.circle,
+                          ),
+                          child: FavoriteButton(
+                            isFavorite: isFavorite,
+                            onTap: () => favorites.toggleFavorite(food.id),
+                            size: 18,
                           ),
                         );
                       },
@@ -149,7 +143,9 @@ class FoodCard extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        onTap: onAddTap,
+                        onTap: () {
+                          if (onAddTap != null) onAddTap!(imageKey);
+                        },
                         child: Container(
                           padding: const EdgeInsets.all(6),
                           decoration: const BoxDecoration(

@@ -2,16 +2,142 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/food_item.dart';
 import '../models/favorites_model.dart';
+import '../models/cart_model.dart'; // Import CartModel
+import '../utils/animation_utils.dart';
+import '../widgets/favorite_button.dart';
+import 'cart_screen.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   final FoodItem food;
 
   const DetailScreen({super.key, required this.food});
 
   @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  @override
   Widget build(BuildContext context) {
+    // We need a key for the image to fly from.
+    final GlobalKey imageKey = GlobalKey();
+
     return Scaffold(
       backgroundColor: const Color(0xFFFDF0F0),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.8),
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Color(0xFF4A0E13),
+                size: 20,
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.8),
+                shape: BoxShape.circle,
+              ),
+              child: Consumer<CartProvider>(
+                builder: (context, cart, child) {
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Center(
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.shopping_bag_outlined,
+                            color: Color(0xFF4A0E13),
+                            size: 20,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CartScreen(),
+                              ),
+                            );
+                          },
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                      ),
+                      if (cart.itemCount > 0)
+                        Positioned(
+                          right: -2,
+                          top: -2,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF8B1C28),
+                              shape: BoxShape.circle,
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
+                            child: Text(
+                              '${cart.itemCount}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Consumer<FavoritesProvider>(
+              builder: (context, favorites, child) {
+                final isFavorite = favorites.isFavorite(widget.food.id);
+                return Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: FavoriteButton(
+                      isFavorite: isFavorite,
+                      onTap: () {
+                        favorites.toggleFavorite(widget.food.id);
+                      },
+                      size: 20,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      extendBodyBehindAppBar:
+          true, // Make body go behind app bar for the hero image
       body: Stack(
         children: [
           // Background Image / Hero
@@ -21,9 +147,10 @@ class DetailScreen extends StatelessWidget {
             right: 0,
             height: MediaQuery.of(context).size.height * 0.55,
             child: Hero(
-              tag: 'food-image-${food.id}',
+              tag: 'food-image-${widget.food.id}',
+              key: imageKey, // Add key to Hero
               child: Image.network(
-                food.imageUrl,
+                widget.food.imageUrl,
                 fit: BoxFit.cover,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
@@ -85,62 +212,6 @@ class DetailScreen extends StatelessWidget {
             ),
           ),
 
-          // Top Navigation (Back Button)
-          Positioned(
-            top: 50,
-            left: 24,
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 8,
-                    ),
-                  ],
-                ),
-                child: const Icon(Icons.arrow_back, color: Color(0xFF4A0E13)),
-              ),
-            ),
-          ),
-
-          // Like Button (Top Right)
-          Positioned(
-            top: 50,
-            right: 24,
-            child: Consumer<FavoritesProvider>(
-              builder: (context, favorites, child) {
-                final isFavorite = favorites.isFavorite(food.id);
-                return GestureDetector(
-                  onTap: () {
-                    favorites.toggleFavorite(food.id);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 8,
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: const Color(0xFF8B1C28),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-
           // Content Sheet
           Positioned(
             top: MediaQuery.of(context).size.height * 0.5,
@@ -150,7 +221,6 @@ class DetailScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(32),
               decoration: BoxDecoration(
-                // deep charcoal background or slightly lighter for contrast
                 color: const Color(0xFFFDF0F0),
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(40),
@@ -168,7 +238,7 @@ class DetailScreen extends StatelessWidget {
                 children: [
                   // Title
                   Text(
-                    food.name,
+                    widget.food.name,
                     style: const TextStyle(
                       color: Color(0xFF4A0E13),
                       fontSize: 32,
@@ -183,12 +253,12 @@ class DetailScreen extends StatelessWidget {
                     children: [
                       _buildMetadataChip(
                         Icons.local_fire_department_rounded,
-                        '${food.calories} cal',
+                        '${widget.food.calories} cal',
                       ),
                       const SizedBox(width: 16),
                       _buildMetadataChip(
                         Icons.scale_rounded,
-                        '${food.weight}g',
+                        '${widget.food.weight}g',
                       ),
                       const SizedBox(width: 16),
                       _buildMetadataChip(Icons.star_rounded, '4.8'),
@@ -207,7 +277,7 @@ class DetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    food.description,
+                    widget.food.description,
                     style: TextStyle(
                       color: const Color(0xFF4A0E13).withOpacity(0.7),
                       fontSize: 14,
@@ -232,7 +302,7 @@ class DetailScreen extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '\$${food.price.toStringAsFixed(2)}',
+                            '\$${widget.food.price.toStringAsFixed(2)}',
                             style: const TextStyle(
                               color: Color(0xFF8B1C28),
                               fontSize: 28,
@@ -245,37 +315,33 @@ class DetailScreen extends StatelessWidget {
 
                       // Add to Cart Button
                       Expanded(
-                        child: Container(
-                          height: 56,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF8B1C28),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF8B1C28).withOpacity(0.4),
-                                blurRadius: 20,
-                                offset: const Offset(0, 8),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            context.read<CartProvider>().addItem(widget.food);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  '${widget.food.name} added to cart',
+                                ),
+                                duration: const Duration(seconds: 1),
+                                backgroundColor: const Color(0xFF8B1C28),
                               ),
-                            ],
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF8B1C28),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            elevation: 0,
                           ),
-                          child: const Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.shopping_bag_outlined,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Add to cart',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
+                          child: const Text(
+                            'Add to Cart',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
