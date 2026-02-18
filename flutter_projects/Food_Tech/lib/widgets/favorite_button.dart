@@ -54,15 +54,21 @@ class _FavoriteButtonState extends State<FavoriteButton>
   void didUpdateWidget(covariant FavoriteButton oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isFavorite != oldWidget.isFavorite) {
-      if (widget.isFavorite) {
-        _controller.forward(from: 0.0);
-        _particleController.forward(from: 0.0);
-        _showOverlay(true);
-      } else {
-        // No animation on the button itself when unliking usually, just state change
-        // But maybe a small shrink for feedback
-        // _controller.reverse(from: 1.0);
-        _showOverlay(false);
+      // Check if the current route is active to prevent background animations
+      final route = ModalRoute.of(context);
+      final isCurrent = route?.isCurrent ?? true;
+
+      if (isCurrent) {
+        if (widget.isFavorite) {
+          _controller.forward(from: 0.0);
+          _particleController.forward(from: 0.0);
+          _showOverlay(true);
+        } else {
+          // No animation on the button itself when unliking usually, just state change
+          // But maybe a small shrink for feedback
+          // _controller.reverse(from: 1.0);
+          _showOverlay(false);
+        }
       }
     }
   }
