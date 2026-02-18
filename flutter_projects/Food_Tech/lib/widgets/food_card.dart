@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import '../models/food_item.dart';
+import 'package:provider/provider.dart';
+import '../models/favorites_model.dart';
 
 class FoodCard extends StatelessWidget {
   final FoodItem food;
   final VoidCallback onTap;
+  final VoidCallback? onAddTap;
 
-  const FoodCard({super.key, required this.food, required this.onTap});
+  const FoodCard({
+    super.key,
+    required this.food,
+    required this.onTap,
+    this.onAddTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,32 +37,77 @@ class FoodCard extends StatelessWidget {
                 children: [
                   Hero(
                     tag: 'food-image-${food.id}',
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(24),
-                        ),
-                        image: DecorationImage(
-                          image: NetworkImage(food.imageUrl),
-                          fit: BoxFit.cover,
-                        ),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(24),
+                      ),
+                      child: Image.network(
+                        food.imageUrl,
+                        fit: BoxFit.cover,
+                        // Use a transparent container to match the size if needed,
+                        // but usually expanded stack handles it.
+                        // However, Image.network needs to fill the space.
+                        // The Container was implicitly filling via Expanded parent?
+                        // The Stack is inside Expanded.
+                        // The Container was: child: Container(...)
+                        // We need ensure width/height are set or it fills.
+                        width: double.infinity,
+                        height: double.infinity,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                  : null,
+                              color: const Color(0xFF8B1C28),
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: const Color(0xFFFDF0F0),
+                            child: const Center(
+                              child: Icon(
+                                Icons.fastfood,
+                                color: Color(0xFF8B1C28),
+                                size: 40,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),
                   Positioned(
                     top: 12,
                     right: 12,
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.4),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.favorite_border,
-                        color: Colors.white,
-                        size: 18,
-                      ),
+                    child: Consumer<FavoritesProvider>(
+                      builder: (context, favorites, child) {
+                        bool isFavorite = favorites.isFavorite(food.id);
+                        return GestureDetector(
+                          onTap: () {
+                            favorites.toggleFavorite(food.id);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.4),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: isFavorite
+                                  ? const Color(0xFF8B1C28)
+                                  : Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -95,16 +148,19 @@ class FoodCard extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF8B1C28), // Maroon Primary
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 16,
+                      GestureDetector(
+                        onTap: onAddTap,
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF8B1C28), // Maroon Primary
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 16,
+                          ),
                         ),
                       ),
                     ],

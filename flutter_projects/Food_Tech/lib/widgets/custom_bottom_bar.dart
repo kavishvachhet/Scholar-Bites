@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class CustomBottomBar extends StatelessWidget {
-  const CustomBottomBar({super.key});
+  final int currentIndex;
+  final Function(int) onTap;
+
+  const CustomBottomBar({
+    super.key,
+    this.currentIndex = 0,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,30 +29,34 @@ class CustomBottomBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildNavItem(Icons.home_rounded, true),
-          _buildNavItem(Icons.favorite_outline, false),
-          _buildNavItem(Icons.notifications_none_rounded, false),
-          _buildNavItem(Icons.person_outline_rounded, false),
+          _buildNavItem(Icons.home_rounded, 0),
+          _buildNavItem(Icons.favorite_outline, 1),
+          _buildNavItem(Icons.shopping_bag_outlined, 2),
+          _buildNavItem(Icons.person_outline_rounded, 3),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, bool isActive) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: isActive
-          ? BoxDecoration(
-              color: const Color(0xFF8B1C28).withOpacity(0.15),
-              shape: BoxShape.circle,
-            )
-          : null,
-      child: Icon(
-        icon,
-        color: isActive
-            ? const Color(0xFF8B1C28)
-            : const Color(0xFF4A0E13).withOpacity(0.5),
-        size: 24,
+  Widget _buildNavItem(IconData icon, int index) {
+    bool isActive = currentIndex == index;
+    return GestureDetector(
+      onTap: () => onTap(index),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: isActive
+            ? BoxDecoration(
+                color: const Color(0xFF8B1C28).withOpacity(0.15),
+                shape: BoxShape.circle,
+              )
+            : null,
+        child: Icon(
+          icon,
+          color: isActive
+              ? const Color(0xFF8B1C28)
+              : const Color(0xFF4A0E13).withOpacity(0.5),
+          size: 24,
+        ),
       ),
     );
   }

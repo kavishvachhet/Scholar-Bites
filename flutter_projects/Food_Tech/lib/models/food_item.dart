@@ -6,6 +6,7 @@ class FoodItem {
   final int calories;
   final int weight;
   final String description;
+  final String category;
 
   const FoodItem({
     required this.id,
@@ -15,5 +16,6 @@ class FoodItem {
     required this.calories,
     required this.weight,
     required this.description,
+    this.category = 'Dinner', // Default to Dinner for now or require it
   });
 }

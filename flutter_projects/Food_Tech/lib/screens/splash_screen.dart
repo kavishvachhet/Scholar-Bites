@@ -180,10 +180,17 @@ class _SplashScreenState extends State<SplashScreen>
                                 _iconRotation.value * (math.pi * 2), // Radians
                             child: ClipOval(
                               child: Image.asset(
-                                'assets/icon/splash_image.jpeg',
+                                'assets/icon/image1.png',
                                 width: 80,
                                 height: 80,
                                 fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(
+                                    Icons.error_outline, // Fallback icon
+                                    color: Colors.white,
+                                    size: 50,
+                                  );
+                                },
                               ),
                             ),
                           ),

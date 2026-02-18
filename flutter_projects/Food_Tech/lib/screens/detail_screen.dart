@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/food_item.dart';
+import '../models/favorites_model.dart';
 
 class DetailScreen extends StatelessWidget {
   final FoodItem food;
@@ -20,7 +22,34 @@ class DetailScreen extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.55,
             child: Hero(
               tag: 'food-image-${food.id}',
-              child: Image.network(food.imageUrl, fit: BoxFit.cover),
+              child: Image.network(
+                food.imageUrl,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                          : null,
+                      color: const Color(0xFF8B1C28),
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: const Color(0xFFFDF0F0),
+                    child: const Center(
+                      child: Icon(
+                        Icons.fastfood,
+                        color: Color(0xFF8B1C28),
+                        size: 60,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
 
@@ -76,6 +105,50 @@ class DetailScreen extends StatelessWidget {
                 ),
                 child: const Icon(Icons.arrow_back, color: Color(0xFF4A0E13)),
               ),
+            ),
+          ),
+
+          // Like Button (Top Right)
+          Positioned(
+            top: 50,
+            right: 24,
+            child: Consumer<FavoritesProvider>(
+              builder: (context, favorites, child) {
+                final isFavorite = favorites.isFavorite(food.id);
+                return GestureDetector(
+                  onTap: () {
+                    favorites.toggleFavorite(food.id);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          isFavorite
+                              ? '${food.name} removed from favorites'
+                              : '${food.name} added to favorites',
+                        ),
+                        duration: const Duration(seconds: 1),
+                        backgroundColor: const Color(0xFF8B1C28),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: const Color(0xFF8B1C28),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
 
