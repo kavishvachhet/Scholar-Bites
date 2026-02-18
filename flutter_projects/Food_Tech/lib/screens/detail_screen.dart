@@ -118,17 +118,6 @@ class DetailScreen extends StatelessWidget {
                 return GestureDetector(
                   onTap: () {
                     favorites.toggleFavorite(food.id);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          isFavorite
-                              ? '${food.name} removed from favorites'
-                              : '${food.name} added to favorites',
-                        ),
-                        duration: const Duration(seconds: 1),
-                        backgroundColor: const Color(0xFF8B1C28),
-                      ),
-                    );
                   },
                   child: Container(
                     padding: const EdgeInsets.all(10),
